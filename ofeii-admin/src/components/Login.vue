@@ -5,28 +5,36 @@
         <img src="../assets/logo.png" alt="logo-login" />
       </div>
       <!-- 登录表单form -->
-      <el-form class="login-form">
+      <el-form class="login-form" :model="loginForm">
         <!-- 用户名 -->
         <el-form-item>
-          <el-input prefix-icon="iconfont icon-user"></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item prefix-icon="iconfont icon-3702mima">
-          <el-input></el-input>
+        <el-form-item>
+          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-3702mima" type="password"></el-input>
         </el-form-item>
         <!-- 登录按钮 -->
         <el-form-item class="login-btns">
           <el-button type="primary">登录</el-button>
-          <el-button type="primary">重置</el-button>  
+          <el-button type="primary">重置</el-button>
         </el-form-item>
       </el-form>
-
     </div>登录组件
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      loginForm:{
+        username:'ofeii',
+        password:'123456'
+      }
+    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -64,13 +72,13 @@ export default {};
     background-color: #eee;
   }
 }
-.login-form{
+.login-form {
   width: 80%;
   position: absolute;
   bottom: 0;
   padding: 0 40px;
 }
-.login-btns{
+.login-btns {
   display: flex;
   justify-content: flex-end;
 }
