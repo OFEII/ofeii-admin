@@ -49,31 +49,32 @@ export default {
     };
   },
   methods: {
-    resetLoginForm(){
+    resetLoginForm() {
       // console.log(this)
-      this.$refs.loginFormRef.resetFields()
+      this.$refs.loginFormRef.resetFields();
     },
-    login(){
-      this.$refs.loginFormRef.validate(async valid=>{
-        if(!valid)return
-        const {data:res} = await this.$http.post('login',this.loginForm)
+    login() {
+      this.$refs.loginFormRef.validate(async valid => {
+        if (!valid) return;
+        const { data: res } = await this.$http.post("login", this.loginForm);
         // console.log(res)
-        if(res.meta.status !==200){
+        if (res.meta.status !== 200) {
           this.$message({
-          message: '😥登陆失败 用户名或命名错误',
-          type: 'error'
-        });
-        }else{
+            message: "😥登陆失败 用户名或命名错误",
+            type: "error"
+          });
+        } else {
           this.$message({
-            message: '😄登陆成功 ofeii-admin',
-            type: 'success'
+            message: "😄登陆成功 ofeii-admin",
+            type: "success"
           });
         }
-      })
-      
+        console.log(res);
+        window.sessionStorage.setItem("token", res.data.token);
+        this.$router.push("/home");
+      });
     }
-  },
-
+  }
 };
 </script>
 
