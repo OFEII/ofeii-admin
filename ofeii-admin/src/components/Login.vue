@@ -58,8 +58,17 @@ export default {
         if(!valid)return
         const {data:res} = await this.$http.post('login',this.loginForm)
         // console.log(res)
-        if(res.meta.status !==200) return console.log('login bad')
-        console.log('success login')
+        if(res.meta.status !==200){
+          this.$message({
+          message: '😥登陆失败 用户名或命名错误',
+          type: 'error'
+        });
+        }else{
+          this.$message({
+            message: '😄登陆成功 ofeii-admin',
+            type: 'success'
+          });
+        }
       })
       
     }
