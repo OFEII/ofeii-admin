@@ -25,7 +25,7 @@
               <!-- 文本 -->
               <span>导航一</span>
             </template>
-            
+      
             <el-menu-item index="1-1">
               <template slot="title">
                 <!-- 图标 -->
@@ -48,12 +48,27 @@
 <script>
 export default {
   data() {
+    return {
+      menulist:[]
+    }
+  },
+  created() {
+    this.getMenuList()
+  },
+  data() {
     return {};
   },
   methods: {
     logout() {
       window.sessionStorage.clear();
       this.$router.push("/login");
+    },
+
+    async getMenuList(){
+      const {data:res} = await this.$http.get('menus')
+      if(res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.menulist = res.data
+      console.log(res)
     }
   }
 };
