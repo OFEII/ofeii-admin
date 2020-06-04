@@ -21,3 +21,10 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+// #528AFC blue
+// #6396FF light blue
+// #67DDBA green
+// #777C90 gary
+// #F9CD02 yellow
+
