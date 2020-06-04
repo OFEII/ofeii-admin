@@ -5,7 +5,7 @@
         <img src="../assets/logo.png" alt="logo-login" />
       </div>
       <!-- 登录表单form -->
-      <el-form class="login-form" :model="loginForm" :rules="loginFormRules">
+      <el-form class="login-form" :model="loginForm" :rules="loginFormRules" ref="loginFormRef">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
@@ -21,7 +21,7 @@
         <!-- 登录按钮 -->
         <el-form-item class="login-btns">
           <el-button type="primary">登录</el-button>
-          <el-button type="primary">重置</el-button>
+          <el-button type="primary" @click="resetLoginForm()">重置</el-button>
         </el-form-item>
       </el-form>
     </div>登录组件
@@ -34,7 +34,7 @@ export default {
     return {
       loginForm: {
         username: "ofeii",
-        password: "123456"
+        password: "123"
       },
       loginFormRules: {
         username: [
@@ -47,7 +47,14 @@ export default {
         ]
       }
     };
-  }
+  },
+  methods: {
+    resetLoginForm(){
+      // console.log(this)
+      this.$refs.loginFormRef.resetFields()
+    }
+  },
+
 };
 </script>
 
