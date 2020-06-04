@@ -10,28 +10,31 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="200px">
-        侧边栏菜单区
+      <el-aside width="240px">
+        <!-- 侧边栏菜单区 -->
         <el-menu
           background-color="#fff"
           text-color="#6396FF"
-          active-text-color="#f2f2f2">
+          active-text-color="#" 
+          :unique-opened="true"
+          >
           <!-- 一级菜单 -->
-          <el-submenu index="1">
+          <!-- index 误区动态绑定 -->
+          <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
             <!-- 一级菜单的模版区域 -->
             <template slot="title">
               <!-- 图标 -->
-              <i class="el-icon-location"></i>
+              <i :class="iconsObj[item.id]"></i>
               <!-- 文本 -->
-              <span>导航一</span>
+              <span>{{item.authName}}</span>
             </template>
       
-            <el-menu-item index="1-1">
+            <el-menu-item :index="item.id+'-'+subItem.id + ''" v-for="subItem in item.children" :key="subItem.id">
               <template slot="title">
                 <!-- 图标 -->
-                <i class="el-icon-location"></i>
+                <i class="el-icon-menu"></i>
                 <!-- 文本 -->
-                <span>导航一</span>
+                <span>{{subItem.authName}}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -49,14 +52,18 @@
 export default {
   data() {
     return {
-      menulist:[]
+      menulist:[],
+      iconsObj:{
+        '125':'iconfont icon-user',
+        '103':'iconfont icon-tijikongjian',
+        '101':'iconfont icon-shangpin',
+        '102':'iconfont icon-danju',
+        '145':'iconfont icon-baobiao'
+      }
     }
   },
   created() {
     this.getMenuList()
-  },
-  data() {
-    return {};
   },
   methods: {
     logout() {
@@ -108,5 +115,11 @@ export default {
 .el-aside {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  .el-menu{
+    border-right: none
+  }
+}
+.el-submenu{
+  margin: 0 2rem;
 }
 </style>
