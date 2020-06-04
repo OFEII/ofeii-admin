@@ -5,14 +5,18 @@
         <img src="../assets/logo.png" alt="logo-login" />
       </div>
       <!-- 登录表单form -->
-      <el-form class="login-form" :model="loginForm">
+      <el-form class="login-form" :model="loginForm" :rules="loginFormRules">
         <!-- 用户名 -->
-        <el-form-item>
+        <el-form-item prop="username">
           <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item>
-          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-3702mima" type="password"></el-input>
+        <el-form-item prop="password">
+          <el-input
+            v-model="loginForm.password"
+            prefix-icon="iconfont icon-3702mima"
+            type="password"
+          ></el-input>
         </el-form-item>
         <!-- 登录按钮 -->
         <el-form-item class="login-btns">
@@ -28,12 +32,22 @@
 export default {
   data() {
     return {
-      loginForm:{
-        username:'ofeii',
-        password:'123456'
+      loginForm: {
+        username: "ofeii",
+        password: "123456"
+      },
+      loginFormRules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 3, max: 12, message: "长度在3到12个字符之间", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 6, max: 18, message: "长度在6到18个字符之间", trigger: "blur" }
+        ]
       }
-    }
-  },
+    };
+  }
 };
 </script>
 
