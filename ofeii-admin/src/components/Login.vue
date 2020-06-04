@@ -33,8 +33,8 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "ofeii",
-        password: "123"
+        username: "admin",
+        password: "123456"
       },
       loginFormRules: {
         username: [
@@ -54,8 +54,12 @@ export default {
       this.$refs.loginFormRef.resetFields()
     },
     login(){
-      this.$refs.loginFormRef.validata(valid=>{
-        console.log(valid)
+      this.$refs.loginFormRef.validate(async valid=>{
+        if(!valid)return
+        const {data:res} = await this.$http.post('login',this.loginForm)
+        // console.log(res)
+        if(res.meta.status !==200) return console.log('login bad')
+        console.log('success login')
       })
       
     }
