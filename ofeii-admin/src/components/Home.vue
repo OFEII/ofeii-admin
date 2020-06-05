@@ -20,6 +20,7 @@
           :collapse="isCollapse"
           :collapse-transition="false"
           router
+          :default-active="$route.path"
         >
         <!-- 一级菜单 -->
         <!-- index 误区动态绑定 -->
