@@ -22,7 +22,35 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      queryInfo:{
+        query:'',
+        pagenum:1,
+        pagesize:2
+      },
+      userlist:[],
+      total:0
+    }
+  },
+  created() {
+    this.getUserList()
+  },
+  methods: {
+    async getUserList(){
+      const {data:res} = await this.$http.get('users',{
+        params:this.queryInfo
+      })
+      if(res.meta.status !==200){
+        return this.$message.error('error')
+      }
+      this.userlist = res.data.users
+      this.total =res.data.total
+      console.log(res)
+    }
+  },
+};
 </script>
 
 <style scoped>
