@@ -9,34 +9,32 @@
         <el-button class="btn-exit" type="info" @click="logout">退出</el-button>
       </div>
     </el-header>
+    <!-- 侧边栏区 -->
     <el-container>
-      <el-aside width="240px">
-        <!-- 侧边栏菜单区 -->
+      <el-aside :width="isCollapse ?'80px':'200px'">
+        <div class="toggle-button" @click="toggleCollapse">⇛</div>
+        <!-- 侧边栏菜单区 -->   
         <el-menu
-          background-color="#fff"
-          text-color="#6396FF"
-          active-text-color="#" 
-          :unique-opened="true"
-          >
-          <!-- 一级菜单 -->
-          <!-- index 误区动态绑定 -->
+          class="home-aside-menu"
+          :unique-opened="false"
+          :collapse="isCollapse"
+          :collapse-transition="false"
+        >
+        <!-- 一级菜单 -->
+        <!-- index 误区动态绑定 -->
           <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
-            <!-- 一级菜单的模版区域 -->
             <template slot="title">
               <!-- 图标 -->
               <i :class="iconsObj[item.id]"></i>
               <!-- 文本 -->
-              <span>{{item.authName}}</span>
+              <span slot="title">{{item.authName}}</span>
             </template>
-      
-            <el-menu-item :index="item.id+'-'+subItem.id + ''" v-for="subItem in item.children" :key="subItem.id">
-              <template slot="title">
-                <!-- 图标 -->
-                <i class="el-icon-menu"></i>
-                <!-- 文本 -->
-                <span>{{subItem.authName}}</span>
-              </template>
-            </el-menu-item>
+              <el-menu-item :index="item.id+'-'+subItem.id + ''" v-for="subItem in item.children" :key="subItem.id">
+                <template slot="title">
+                  <i class="el-icon-menu"></i>  
+                  <span>{{subItem.authName}}</span>
+                </template>
+              </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -52,18 +50,20 @@
 export default {
   data() {
     return {
-      menulist:[],
-      iconsObj:{
-        '125':'iconfont icon-user',
-        '103':'iconfont icon-tijikongjian',
-        '101':'iconfont icon-shangpin',
-        '102':'iconfont icon-danju',
-        '145':'iconfont icon-baobiao'
-      }
-    }
+      menulist: [],
+      iconsObj: {
+        "125": "iconfont icon-user",
+        "103": "iconfont icon-tijikongjian",
+        "101": "iconfont icon-shangpin",
+        "102": "iconfont icon-danju",
+        "145": "iconfont icon-baobiao"
+      },
+      // 是否折叠
+      isCollapse: false
+    };
   },
   created() {
-    this.getMenuList()
+    this.getMenuList();
   },
   methods: {
     logout() {
@@ -71,11 +71,14 @@ export default {
       this.$router.push("/login");
     },
 
-    async getMenuList(){
-      const {data:res} = await this.$http.get('menus')
-      if(res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.menulist = res.data
-      console.log(res)
+    async getMenuList() {
+      const { data: res } = await this.$http.get("menus");
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg);
+      this.menulist = res.data;
+      console.log(res);
+    },
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse;
     }
   }
 };
@@ -112,14 +115,25 @@ export default {
     align-items: center;
   }
 }
+.home-aside-menu{
+  margin-left: -1.25rem;
+}
 .el-aside {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  .el-menu{
-    border-right: none
+  .el-menu {
+    border-right: none;
   }
 }
-.el-submenu{
+.el-submenu {
   margin: 0 2rem;
+}
+.toggle-button {
+  background-color: #f2f2f2;
+  font-size: 1rem;
+  line-height: 2rem;
+  color: rgba(0, 0, 0, 0.493);
+  text-align: center;
+  letter-spacing: 0.2rem;
 }
 </style>
