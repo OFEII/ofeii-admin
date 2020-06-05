@@ -19,6 +19,7 @@
           :unique-opened="false"
           :collapse="isCollapse"
           :collapse-transition="false"
+          router
         >
         <!-- 一级菜单 -->
         <!-- index 误区动态绑定 -->
@@ -29,7 +30,8 @@
               <!-- 文本 -->
               <span slot="title">{{item.authName}}</span>
             </template>
-              <el-menu-item :index="item.id+'-'+subItem.id + ''" v-for="subItem in item.children" :key="subItem.id">
+            <!-- 二级菜单 -->
+              <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id">
                 <template slot="title">
                   <i class="el-icon-menu"></i>  
                   <span>{{subItem.authName}}</span>
