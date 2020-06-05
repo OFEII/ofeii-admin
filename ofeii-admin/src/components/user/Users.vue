@@ -6,7 +6,9 @@
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
+    <!-- 卡片视图区域 -->
     <el-card class="box-card">
+      <!-- 搜索与添加区域 -->
       <el-row :gutter="20">
         <el-col :span="9">
           <el-input placeholder="请输入内容">
@@ -17,6 +19,16 @@
           <el-button type="primary">添加用户</el-button>
         </el-col>
       </el-row>
+      <!-- 用户列表区 -->
+      <el-table :data="userlist" border stripe style="width:100%">
+        <el-table-column label="姓名" prop="username"></el-table-column>
+        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column label="电话" prop="mobile"></el-table-column>
+        <el-table-column label="角色" prop="role_name"></el-table-column>
+        <el-table-column label="状态" prop="mg_state"></el-table-column>
+        <el-table-column label="操作"></el-table-column>
+
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -54,4 +66,10 @@ export default {
 </script>
 
 <style scoped>
+.box-card{
+  margin-top: 1rem;
+}
+.el-table th {
+	/* display: table-cell!important;  */
+}
 </style>
