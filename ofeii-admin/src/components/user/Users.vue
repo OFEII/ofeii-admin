@@ -20,14 +20,14 @@
         </el-col>
       </el-row>
       <!-- 用户列表区 -->
-      <el-table :data="userlist" border stripe style="width:100%">
+      <el-table :data="userlist" border stripe class="userlist-table">
+        <el-table-column type="index" label="😶"></el-table-column>
         <el-table-column label="姓名" prop="username"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="电话" prop="mobile"></el-table-column>
         <el-table-column label="角色" prop="role_name"></el-table-column>
         <el-table-column label="状态" prop="mg_state"></el-table-column>
         <el-table-column label="操作"></el-table-column>
-
       </el-table>
     </el-card>
   </div>
@@ -69,7 +69,8 @@ export default {
 .box-card{
   margin-top: 1rem;
 }
-.el-table th {
-	/* display: table-cell!important;  */
+.userlist-table{
+  width: 100%;
+  margin-top: 1rem;
 }
 </style>
