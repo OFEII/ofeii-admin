@@ -29,11 +29,26 @@
         <el-table-column label="状态" prop="mg_state">
           <!-- v-slot <== slot-scope -->
           <template v-slot="scope">
-            {{scope.row}}
+            <!-- {{scope.row}} -->
             <el-switch v-model="scope.row.mg_state" active-color="#528AFC" inactive-color="#777"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="操作">
+          <template v-slot="scoped">
+            <!-- 修改按钮 -->
+            <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
+              <el-button type="primary" icon="el-icon-edit" size="small"></el-button>
+            </el-tooltip>
+            <!-- 删除按钮 -->
+            <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
+              <el-button type="danger" icon="el-icon-share" size="small"></el-button>
+            </el-tooltip>
+            <!-- 分配角色按钮 -->
+            <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
+              <el-button type="warning" icon="el-icon-delete" size="small"></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
   </div>
