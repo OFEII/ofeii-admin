@@ -39,7 +39,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <template v-slot:scope>
+          <template v-slot="scope">
             <!-- 修改按钮 -->
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
               <el-button type="primary" icon="el-icon-edit" size="small"></el-button>
@@ -208,10 +208,17 @@ export default {
     // 点击按钮 添加新用户  
 
     addUser(){
-      this.$refs.addFormRef.validate(valid=>{
+      this.$refs.addFormRef.validate(async valid=>{
         console.log(valid)
         if(!valid) return 
         // 可以发起添加用户网络请求
+        const {data:res} = await this.$http.post('users',this.addForm)
+        if(res.meta.status!==201){
+          this.$message.error('添加用户失败😥')
+        }
+        this.$message.success('添加用户成功🤗')
+        this.addDialogVisible = false
+        this.getUserList()
       })
     }
   }
