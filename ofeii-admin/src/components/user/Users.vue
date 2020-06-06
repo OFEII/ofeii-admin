@@ -300,7 +300,13 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
+        }).then(async() => {
+          const {data:res} = await this.$http.delete('users/'+id)
+          if(res.meta.status !== 200){
+            return this.$message.error('删除用户失败😢')
+          }
+          this.$message.error('删除用户成功🤗')
+          this.getUserList()
           this.$message({
             type: 'success',
             message: '删除成功!'
