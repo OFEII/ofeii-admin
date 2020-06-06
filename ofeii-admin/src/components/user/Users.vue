@@ -39,7 +39,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <template v-slot="scoped">
+          <template v-slot:scope>
             <!-- 修改按钮 -->
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
               <el-button type="primary" icon="el-icon-edit" size="small"></el-button>
@@ -98,7 +98,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -201,8 +201,18 @@ export default {
       }
       this.$message.success("更新用户状态成功");
     },
+    // 监听关闭dialog的关闭事件
     addDialogClosed(){
       this.$refs.addFormRef.resetFields()
+    },
+    // 点击按钮 添加新用户  
+
+    addUser(){
+      this.$refs.addFormRef.validate(valid=>{
+        console.log(valid)
+        if(!valid) return 
+        // 可以发起添加用户网络请求
+      })
     }
   }
 };
