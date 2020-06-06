@@ -76,9 +76,13 @@
       title="添加用户"
       :visible.sync="addDialogVisible"
       width="30%"
-      :before-close="handleClose"
+      @close="addDialogClosed"
     >
-      <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="80px">
+      <el-form 
+        :model="addForm" 
+        :rules="addFormRules" 
+        ref="addFormRef"
+        abel-width="80px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="addForm.username"></el-input>
         </el-form-item>
@@ -164,13 +168,6 @@ export default {
     this.getUserList();
   },
   methods: {
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-    },
     async getUserList() {
       const { data: res } = await this.$http.get("users", {
         params: this.queryInfo
@@ -203,6 +200,9 @@ export default {
         return this.$message.error("更新用户状态失败");
       }
       this.$message.success("更新用户状态成功");
+    },
+    addDialogClosed(){
+      this.$refs.addFormRef.resetFields()
     }
   }
 };
