@@ -42,7 +42,7 @@
           <template v-slot="scope">
             <!-- 修改按钮 -->
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" size="small"></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="small" @click="showEditDialog"></el-button>
             </el-tooltip>
             <!-- 删除按钮 -->
             <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
@@ -71,13 +71,12 @@
         :total="total"
       ></el-pagination>
     </el-card>
-    <!-- 添加用户对话框 -->
+    <!-- 添加用户对话框dialog -->
     <el-dialog
       title="添加用户"
       :visible.sync="addDialogVisible"
       width="30%"
-      @close="addDialogClosed"
-    >
+      @close="addDialogClosed">
       <el-form 
         :model="addForm" 
         :rules="addFormRules" 
@@ -99,6 +98,17 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addUser">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 编辑用户对话框dialog -->  
+    <el-dialog
+      title="修改用户"
+      :visible.sync="editDialogVisible"
+      width="50%">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -135,6 +145,8 @@ export default {
       total: 0,
       // 控制添加用户对话框的显示和隐藏
       addDialogVisible: false,
+      // 控制x修改用户对话框的显示和隐藏
+      editDialogVisible: false,
       // 添加用户的表单数据
       addForm: {
         username:'',
@@ -220,6 +232,10 @@ export default {
         this.addDialogVisible = false
         this.getUserList()
       })
+    },
+    // 编辑用户信息的dialog
+    showEditDialog(){
+      this.editDialogVisible = true
     }
   }
 };
