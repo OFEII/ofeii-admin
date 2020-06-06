@@ -46,7 +46,7 @@
             </el-tooltip>
             <!-- 删除按钮 -->
             <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
-              <el-button type="danger" icon="el-icon-share" size="small"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="small" @click="removeUserById(scope.row.id)"></el-button>
             </el-tooltip>
             <!-- 分配角色按钮 -->
             <el-tooltip
@@ -56,7 +56,7 @@
               placement="top"
               :enterable="false"
             >
-              <el-button type="warning" icon="el-icon-delete" size="small"></el-button>
+              <el-button type="warning" icon="el-icon-share" size="small"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -293,6 +293,24 @@ export default {
         this.getUserList()
         this.$message.success('更新用户信息失败成功🤗')
       })
+    },
+    // 根据id删除对应的用户信息
+    removeUserById(id){
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     }
   }
 };
