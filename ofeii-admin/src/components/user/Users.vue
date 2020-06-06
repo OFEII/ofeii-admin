@@ -42,7 +42,7 @@
           <template v-slot="scope">
             <!-- 修改按钮 -->
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" size="small" @click="showEditDialog"></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="small" @click="showEditDialog(scope.row.id)"></el-button>
             </el-tooltip>
             <!-- 删除按钮 -->
             <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
@@ -105,7 +105,20 @@
       title="修改用户"
       :visible.sync="editDialogVisible"
       width="50%">
-      <span>这是一段信息</span>
+      <el-form>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="addForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="addForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="addForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="mobile">
+          <el-input v-model="addForm.mobile"></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
@@ -173,6 +186,10 @@ export default {
           { validator:checkMobile, trigger: 'blur'}
         ],        
 
+      },
+      // 编辑操作查询到的用户信息对象id
+      editForm:{
+
       }
     };
   },
@@ -234,7 +251,14 @@ export default {
       })
     },
     // 编辑用户信息的dialog
-    showEditDialog(){
+    async showEditDialog(id){
+      console.log(id)
+      const{data:res} = await this.$http.get('users/'+id)
+      if(res.meta.status !==200){
+        return this.$message.error('查询用户信息失败')
+      }
+      this.editForm = res.data
+      console.log(this.editForm)
       this.editDialogVisible = true
     }
   }
