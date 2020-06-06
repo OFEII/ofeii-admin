@@ -16,7 +16,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary" @click="addDialogVisible=true">添加用户</el-button>
         </el-col>
       </el-row>
       <!-- 用户列表区 -->
@@ -30,9 +30,12 @@
           <!-- v-slot <== slot-scope -->
           <template v-slot="scope">
             <!-- {{scope.row}} -->
-            <el-switch v-model="scope.row.mg_state" active-color="#528AFC" inactive-color="#777" @change="userStateChanged(scope.row)">
-
-            </el-switch>
+            <el-switch
+              v-model="scope.row.mg_state"
+              active-color="#528AFC"
+              inactive-color="#777"
+              @change="userStateChanged(scope.row)"
+            ></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -46,22 +49,40 @@
               <el-button type="danger" icon="el-icon-share" size="small"></el-button>
             </el-tooltip>
             <!-- 分配角色按钮 -->
-            <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="分配角色"
+              placement="top"
+              :enterable="false"
+            >
               <el-button type="warning" icon="el-icon-delete" size="small"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
-          <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="queryInfo.pagenum"
-      :page-sizes="[1, 2, 5, 10]"
-      :page-size="queryInfo.pagesize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total">
-    </el-pagination>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[1, 2, 5, 10]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
     </el-card>
+    <!-- 添加用户对话框 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="addDialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,7 +99,9 @@ export default {
         pagesize: 2
       },
       userlist: [],
-      total: 0
+      total: 0,
+      // 控制添加用户对话框的显示和隐藏
+      addDialogVisible: false
     };
   },
   created() {
@@ -97,25 +120,26 @@ export default {
       console.log(res);
     },
     // 监听pagesize改变事件
-    handleSizeChange(newSize){
-      console.log(newSize)
-      this.queryInfo.pagesize = newSize
-      this.getUserList()
+    handleSizeChange(newSize) {
+      console.log(newSize);
+      this.queryInfo.pagesize = newSize;
+      this.getUserList();
     },
-    handleCurrentChange(newPage){
-      console.log(newPage)
-      this.queryInfo.pagenum = newPage
-      this.getUserList()
+    handleCurrentChange(newPage) {
+      console.log(newPage);
+      this.queryInfo.pagenum = newPage;
+      this.getUserList();
     },
-    async userStateChanged(userinfo){
-      console.log(userinfo)
-      const {data:res} = await this.$http.put(`users/${userinfo.id}/state/${userinfo.mg_state}`)
-      if(res.meta.status !==200){
-        userinfo.mg_state = !userinfo.mg_state
-        return this.$message.error('更新用户状态失败')
+    async userStateChanged(userinfo) {
+      console.log(userinfo);
+      const { data: res } = await this.$http.put(
+        `users/${userinfo.id}/state/${userinfo.mg_state}`
+      );
+      if (res.meta.status !== 200) {
+        userinfo.mg_state = !userinfo.mg_state;
+        return this.$message.error("更新用户状态失败");
       }
-      this.$message.success('更新用户状态成功')
-
+      this.$message.success("更新用户状态成功");
     }
   }
 };
@@ -129,7 +153,7 @@ export default {
   width: 100%;
   margin-top: 1rem;
 }
-.el-pagination{
+.el-pagination {
   margin-top: 1rem;
 }
 </style>
