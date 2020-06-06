@@ -104,7 +104,8 @@
     <el-dialog
       title="修改用户"
       :visible.sync="editDialogVisible"
-      width="50%">
+      width="50%"
+      @close="editDialogClosed">
       <el-form
         :model="editForm" 
         :rules="editFormRules" 
@@ -271,7 +272,11 @@ export default {
       this.editForm = res.data
       console.log(this.editForm)
       this.editDialogVisible = true
-    }
+    },
+    // 监听关闭修改用户dialog的关闭事件
+    editDialogClosed(){
+      this.$refs.editFormRef.resetFields()
+    },
   }
 };
 </script>
