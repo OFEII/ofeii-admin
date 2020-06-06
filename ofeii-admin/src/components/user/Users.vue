@@ -81,7 +81,7 @@
         :model="addForm" 
         :rules="addFormRules" 
         ref="addFormRef"
-        abel-width="80px">
+        label-width="80px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="addForm.username"></el-input>
         </el-form-item>
@@ -105,18 +105,19 @@
       title="修改用户"
       :visible.sync="editDialogVisible"
       width="50%">
-      <el-form>
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="addForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="addForm.password"></el-input>
+      <el-form
+        :model="editForm" 
+        :rules="editFormRules" 
+        ref="editFormRef"
+        label-width="80px">
+        <el-form-item label="用户名">
+          <el-input v-model="editForm.username"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="addForm.email"></el-input>
+          <el-input v-model="editForm.email"></el-input>
         </el-form-item>
         <el-form-item label="手机" prop="mobile">
-          <el-input v-model="addForm.mobile"></el-input>
+          <el-input v-model="editForm.mobile"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -175,7 +176,7 @@ export default {
         ],
         password:[
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+          { pattern: /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_]+$)(?![a-z0-9]+$)(?![a-z\W_]+$)(?![0-9\W_]+$)[a-zA-Z0-9\W_]{8,20}$/, message: '密码为数字+小写字母+特殊符号,至少包含三种长度为 8 - 20位' }
         ],
         email:[
           { required: true, message: '请输入正确的邮箱', trigger: 'blur' },
@@ -189,7 +190,18 @@ export default {
       },
       // 编辑操作查询到的用户信息对象id
       editForm:{
-
+        email:'',
+        mobile:''
+      },
+      editFormRules:{
+        email:[
+          { required: true, message: '请输入正确的邮箱', trigger: 'blur' },
+          { validator:checkEmail, trigger: 'blur'}
+        ],
+        mobile:[
+          { required: true, message: '请输入正确的手机号', trigger: 'blur' },
+          { validator:checkMobile, trigger: 'blur'}
+        ], 
       }
     };
   },
@@ -235,7 +247,6 @@ export default {
       this.$refs.addFormRef.resetFields()
     },
     // 点击按钮 添加新用户  
-
     addUser(){
       this.$refs.addFormRef.validate(async valid=>{
         console.log(valid)
