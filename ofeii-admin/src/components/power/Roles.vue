@@ -24,10 +24,10 @@
         <!-- 展开列 -->
         <el-table-column type="expand">
           <template v-slot="scope">
-            <el-row :class="['bdbottom',i1===0?'bdtop':'','vcenter']" :gutter="10" v-for="(item1, i1) in scope.row.children" :key="item1.id">
+            <el-row :class="['bdbottom',i1===0?'bdtop':'','vcenter']" :gutter="10" v-for="(item1, i1) in scope.row.children" :key="item1.id" >
               <!-- 渲染一级权限 -->
               <el-col :span="5">
-                <el-tag type="primary">
+                <el-tag type="primary" closable @close="removeRightById(scope.row,item1.id)">
                   {{item1.authName}}
                 </el-tag>
                 <i class="el-icon-caret-right"></i>
@@ -36,13 +36,13 @@
               <el-col :span="19">
                 <el-row :class="['bdbottom',i2===0?'bdtop':'bdbottom','vcenter']" v-for="(item2, i2) in item1.children" :key="item2.id">
                   <el-col :span="6">
-                    <el-tag type="success">
+                    <el-tag type="success"  closable @close="removeRightById(scope.row,item2.id)">
                       {{item2.authName}}
                     </el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <el-col :span="18">
-                    <el-tag type="warning" v-for="(item3,i3) in item2.children" :key="item3.id">
+                    <el-tag type="warning" v-for="(item3,i3) in item2.children" :key="item3.id" closable @close="removeRightById(scope.row,item3.id)">
                       {{item3.authName}}
                     </el-tag>
                   </el-col>
@@ -234,6 +234,30 @@ export default {
             message: '已取消删除'
           });          
         });
+    },
+    removeRightById(role, rightId){
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        const {data:res} = await this.$http.delete(`roles/${role.id}/rights/${rightId}`)
+        if(res.meta.status !== 200){
+          return this.$message.error('删除权限失败😢')
+        }
+        this.$message.error('删除权限成功🤗')
+        // this.getRoleList()发生页面的完整渲染
+        role.children = res.data
+        this.$message({
+          type: 'success',
+          message: '删除成功🤗!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除😢'
+        });          
+      });
     }    
   }
 }
