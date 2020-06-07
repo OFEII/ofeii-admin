@@ -219,21 +219,21 @@ export default {
       }
       this.userlist = res.data.users;
       this.total = res.data.total;
-      console.log(res);
+      // console.log(res);
     },
     // 监听pagesize改变事件
     handleSizeChange(newSize) {
-      console.log(newSize);
+      // console.log(newSize);
       this.queryInfo.pagesize = newSize;
       this.getUserList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
+      // console.log(newPage);
       this.queryInfo.pagenum = newPage;
       this.getUserList();
     },
     async userStateChanged(userinfo) {
-      console.log(userinfo);
+      // console.log(userinfo);
       const { data: res } = await this.$http.put(
         `users/${userinfo.id}/state/${userinfo.mg_state}`
       );
@@ -250,7 +250,7 @@ export default {
     // 点击按钮 添加新用户  
     addUser(){
       this.$refs.addFormRef.validate(async valid=>{
-        console.log(valid)
+        // console.log(valid)
         if(!valid) return 
         // 可以发起添加用户网络请求
         const {data:res} = await this.$http.post('users',this.addForm)
@@ -264,13 +264,13 @@ export default {
     },
     // 编辑用户信息的dialog
     async showEditDialog(id){
-      console.log(id)
+      // console.log(id)
       const{data:res} = await this.$http.get('users/'+id)
       if(res.meta.status !==200){
         return this.$message.error('查询用户信息失败')
       }
       this.editForm = res.data
-      console.log(this.editForm)
+      // console.log(this.editForm)
       this.editDialogVisible = true
     },
     // 监听关闭修改用户dialog的关闭事件
