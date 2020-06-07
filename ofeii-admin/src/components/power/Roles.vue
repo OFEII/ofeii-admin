@@ -35,16 +35,18 @@
               <!-- 渲染二三级权限 -->
               <el-col :span="19">
                 <el-row :class="['bdbottom',i2===0?'bdtop':'bdbottom']" v-for="(item2, i2) in item1.children" :key="item2.id">
-                  <el-col>
+                  <el-col :span="6">
                     <el-tag type="success">
                       {{item2.authName}}
                     </el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
-                  <el-col></el-col>
+                  <el-col :span="18">
+                    <el-tag type="warning" v-for="(item3,i3) in item2.children" :key="item3.id">
+                      {{item3.authName}}
+                    </el-tag>
+                  </el-col>
                 </el-row>
-                <!-- <el-tag type="success"></el-tag> -->
-                <!-- <i class="el-icon-caret-right"></i> -->
               </el-col>
             </el-row>
             <pre>
