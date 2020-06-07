@@ -24,7 +24,7 @@
         <!-- 展开列 -->
         <el-table-column type="expand">
           <template v-slot="scope">
-            <el-row :class="['bdbottom',i1===0?'bdtop':'']" :gutter="10" v-for="(item1, i1) in scope.row.children" :key="item1.id">
+            <el-row :class="['bdbottom',i1===0?'bdtop':'','vcenter']" :gutter="10" v-for="(item1, i1) in scope.row.children" :key="item1.id">
               <!-- 渲染一级权限 -->
               <el-col :span="5">
                 <el-tag type="primary">
@@ -34,7 +34,7 @@
               </el-col>
               <!-- 渲染二三级权限 -->
               <el-col :span="19">
-                <el-row :class="['bdbottom',i2===0?'bdtop':'bdbottom']" v-for="(item2, i2) in item1.children" :key="item2.id">
+                <el-row :class="['bdbottom',i2===0?'bdtop':'bdbottom','vcenter']" v-for="(item2, i2) in item1.children" :key="item2.id">
                   <el-col :span="6">
                     <el-tag type="success">
                       {{item2.authName}}
@@ -49,9 +49,9 @@
                 </el-row>
               </el-col>
             </el-row>
-            <pre>
+            <!-- <pre>
               {{scope.row}}
-            </pre>
+            </pre> -->
           </template>
         </el-table-column>
         <!-- 索引列 -->
@@ -250,5 +250,10 @@ export default {
 
 .bdbottom{
   border-bottom: 1px solid #eee;
+}
+
+.vcenter{
+  display: flex;
+  align-items: center;
 }
 </style>
