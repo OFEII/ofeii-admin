@@ -24,6 +24,16 @@
         <!-- 展开列 -->
         <el-table-column type="expand">
           <template v-slot="scope">
+            <el-row :gutter="10" v-for="(item1, i1) in scope.row.children" :key="item1.id">
+              <!-- 渲染一级权限 -->
+              <el-col :span="5">
+                <el-tag type="primary">
+                  {{item1.authName}}
+                </el-tag>
+              </el-col>
+              <!-- 渲染二三级权限 -->
+              <el-col :span="19"></el-col>
+            </el-row>
             <pre>
               {{scope.row}}
             </pre>
