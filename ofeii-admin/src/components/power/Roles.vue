@@ -10,20 +10,27 @@
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 添加角色按钮区域 -->
-      <el-row :gutter="10">
+      <el-row>
         <el-col :span="6">
           <el-button type="primary">添加角色</el-button>
         </el-col>
       </el-row>
+
       <el-table
         :data="roleList"
-        style="width: 100%">
-        <el-table-column type="index" label="🍍"></el-table-column>
-        <el-table-column prop="authName" label="权限名称"></el-table-column>
-        <el-table-column prop="path" label="路径"></el-table-column>
-        <el-table-column prop="level" label="路由等级">
-          <template>
-          </template>
+        style="width: 100%"
+        border
+        stripe>
+        <!-- 展开列 -->
+        <el-table-column type="expand"></el-table-column>
+        <!-- 索引列 -->
+        <el-table-column type="index" label="🌮"></el-table-column>
+        <el-table-column prop="roleName" label="角色名称"></el-table-column>
+        <el-table-column prop="roleDesc" label="角色描述"></el-table-column>
+        <el-table-column label="操作" width="400px">
+          <el-button type="primary" icon="el-icon-search">编辑</el-button>
+          <el-button type="danger" icon="el-icon-delete">删除</el-button>
+          <el-button type="warning" icon="el-icon-setting">分配权限</el-button>
         </el-table-column>
         <!-- <el-table-column prop="path" label="路径"></el-table-column> -->
 
