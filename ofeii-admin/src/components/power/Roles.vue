@@ -4,22 +4,25 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>权限管理</el-breadcrumb-item>
-      <el-breadcrumb-item>权限列表</el-breadcrumb-item>
+      <el-breadcrumb-item>角色列表</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 卡片视图区域 -->
     <el-card>
+      <!-- 添加角色按钮区域 -->
+      <el-row :gutter="10">
+        <el-col :span="6">
+          <el-button type="primary">添加角色</el-button>
+        </el-col>
+      </el-row>
       <el-table
-        :data="rightsList"
+        :data="roleList"
         style="width: 100%">
         <el-table-column type="index" label="🍍"></el-table-column>
         <el-table-column prop="authName" label="权限名称"></el-table-column>
         <el-table-column prop="path" label="路径"></el-table-column>
         <el-table-column prop="level" label="路由等级">
-          <template v-slot="scope">
-            <el-tag v-if="scope.row.level === '0'">一级</el-tag>
-            <el-tag type="success" v-else-if="scope.row.level === '1'">二级</el-tag>
-            <el-tag type="warning" v-else>三级</el-tag>
+          <template>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="path" label="路径"></el-table-column> -->
@@ -33,22 +36,23 @@
 export default {
   data() {
     return {
-      // 权限列表
-      rightsList:[]
+      // 所有角色的列表数据
+      roleList:[]
     }
   },
   created() {
     // 获取所有的权限
-    this.getRightsList()
+    this.getRoleList()
   },
   methods: {
-    async getRightsList(){
-      const {data:res} = await this.$http.get('rights/list')
+    // 所有角色的列表
+    async getRoleList(){
+      const {data:res} = await this.$http.get('roles')
       if(res.meta.status !== 200){
-        return this.$message.error('获取列表失败')
+        return this.$message.error('获取角色列表失败')
       }
-      this.rightsList = res.data
-      console.log(this.rightsList)
+      this.roleList = res.data
+      console.log(this.roleList)
     }
 
   },
