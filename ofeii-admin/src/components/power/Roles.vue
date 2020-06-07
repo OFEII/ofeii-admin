@@ -22,7 +22,13 @@
         border
         stripe>
         <!-- 展开列 -->
-        <el-table-column type="expand"></el-table-column>
+        <el-table-column type="expand">
+          <template v-slot="scope">
+            <pre>
+              {{scope.row}}
+            </pre>
+          </template>
+        </el-table-column>
         <!-- 索引列 -->
         <el-table-column type="index" label="🌮"></el-table-column>
         <el-table-column prop="roleName" label="角色名称"></el-table-column>
