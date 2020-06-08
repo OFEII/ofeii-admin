@@ -23,14 +23,36 @@
 export default {
   data() {
     return {
-      
+      querInfo:{
+        type:3,
+        pagenum:1,
+        pagesize:5
+      },
+      // 商品分类的数据列表 默认为空
+      catelist:[],
+      total:0
     }
   },
   created() {
-    
+    this.getCateList()
   },
   methods: {
-    
+    // 获取商品分类数据
+    async getCateList(){
+      const {data:res} = await this.$http.get('categories',{
+        params: this.querInfo
+      })
+
+      if(res.meta.status !== 200){
+        return this.$message.error('获取商品分类失败')
+      }
+      console.log(res.data)
+      this.catelist = res.data.result
+      this.total = res.data.total
+      console.log(this.catelist)
+      console.log(this.total)
+
+    }
   },
 
 }
