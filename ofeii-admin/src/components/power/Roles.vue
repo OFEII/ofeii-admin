@@ -126,7 +126,9 @@
       <el-tree 
         :data="rightslist" 
         :props="treeProps" 
-        @node-click="handleNodeClick">
+        show-checkbox
+        node-key="id"
+        default-expand-all>
       </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisible = false">取 消</el-button>
