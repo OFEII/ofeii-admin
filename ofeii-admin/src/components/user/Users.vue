@@ -56,7 +56,7 @@
               placement="top"
               :enterable="false"
             >
-              <el-button type="warning" icon="el-icon-share" size="small"></el-button>
+              <el-button type="warning" icon="el-icon-share" size="small" @click="setRole(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -126,6 +126,18 @@
         <el-button type="primary" @click="editUserInfo">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分配角色对话框 -->
+    <el-dialog title="分配角色" :visible.sync="setRoleDialogVisible" width="50%">
+        <div>
+        <p>当前的用户:{{userInfo.username}}</p>
+        <p>当前的角色:{{userInfo.role_name}}</p>
+        <p>分配新角色:</p>
+        </div>
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setRoleDialogVisible = false">确 定</el-button>
+        </span>
+    </el-dialog>    
   </div>
 </template>
 
@@ -162,6 +174,7 @@ export default {
       addDialogVisible: false,
       // 控制x修改用户对话框的显示和隐藏
       editDialogVisible: false,
+      setRoleDialogVisible: false,
       // 添加用户的表单数据
       addForm: {
         username:'',
@@ -203,7 +216,13 @@ export default {
           { required: true, message: '请输入正确的手机号', trigger: 'blur' },
           { validator:checkMobile, trigger: 'blur'}
         ], 
-      }
+      },
+      // 需要被分配的角色用户信息
+      userInfo:{},
+      //保存所有的角色信息
+      rolesList:[],
+      //保存用户选中的角色id
+      selectedRoleId:''
     };
   },
   created() {
@@ -232,13 +251,13 @@ export default {
       this.queryInfo.pagenum = newPage;
       this.getUserList();
     },
-    async userStateChanged(userinfo) {
-      // console.log(userinfo);
+    async userStateChanged(userInfo) {
+      // console.log(userInfo);
       const { data: res } = await this.$http.put(
-        `users/${userinfo.id}/state/${userinfo.mg_state}`
+        `users/${userInfo.id}/state/${userInfo.mg_state}`
       );
       if (res.meta.status !== 200) {
-        userinfo.mg_state = !userinfo.mg_state;
+        userInfo.mg_state = !userInfo.mg_state;
         return this.$message.error("更新用户状态失败");
       }
       this.$message.success("更新用户状态成功");
@@ -317,6 +336,17 @@ export default {
             message: '已取消删除'
           });          
         });
+    },
+    async setRole(userInfo){
+      this.userInfo = userInfo
+
+      const {data:res} = await this.$http.get('roles')
+      if(res.meta.status !== 200){
+        return this.$message.error('获取角色列表失败！')
+      }
+      this.rolesList = res.data
+      console.log(this.rolesList)
+      this.setRoleDialogVisible = true
     }
   }
 };
