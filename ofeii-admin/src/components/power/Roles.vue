@@ -42,7 +42,7 @@
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <el-col :span="18">
-                    <el-tag type="warning" v-for="(item3,i3) in item2.children" :key="item3.id" closable @close="removeRightById(scope.row,item3.id)">
+                    <el-tag type="warning" v-for="(item3) in item2.children" :key="item3.id" closable @close="removeRightById(scope.row,item3.id)">
                       {{item3.authName}}
                     </el-tag>
                   </el-col>
@@ -62,7 +62,7 @@
           <template v-slot="scope">
             <el-button type="primary" icon="el-icon-search" @click="showEditRoleDialog(scope.row.id)">编辑</el-button>
             <el-button type="danger" icon="el-icon-delete" @click="removeRoleById(scope.row.id)">删除</el-button>
-            <el-button type="warning" icon="el-icon-setting">分配权限</el-button>
+            <el-button type="warning" icon="el-icon-setting" @click="showSetRightDialog">分配权限</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -116,6 +116,17 @@
         <el-button type="primary" @click="editRoleInfo">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分配权限的对话框dialog -->
+    <el-dialog
+      title="分配权限"
+      :visible.sync="setRightDialogVisible"
+      width="30%"
+      @close="setRightDialogClosed">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRightDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setRightDialog=false">确 定</el-button>
+      </span>
+    </el-dialog>    
   </div>
 </template>
 
@@ -127,6 +138,7 @@ export default {
       rolelist:[],
       addRoleDialogVisible: false,
       editRoleDialogVisible: false,
+      setRightDialogVisible: false,
       addRoleForm:{
         roleId:'',
         roleName:'',
@@ -139,6 +151,7 @@ export default {
         roleDesc:''
       },
       editRoleFormRules:{},
+      rightslist:{}
 
     }
   },
@@ -258,7 +271,20 @@ export default {
           message: '已取消删除😢'
         });          
       });
-    }    
+    },
+    async showSetRightDialog(){
+      const{data:res} = await this.$http.get('rights/tree')
+      if(res.meta.status !== 200){
+        return this.$message.error('获取所有权限数据失败')
+      }
+      this.rightslist = res.data
+      console.log(this.rightslist)
+      this.setRightDialogVisible = true
+
+    },
+    setRightDialogClosed(){
+      // this.$refs.addRoleFormRef.resetFields()
+    },    
   }
 }
 </script>
