@@ -14,6 +14,16 @@
         </el-col>
       </el-row>
       <!-- 表格 -->
+      <tree-table
+        :data="catelist"
+        :columns="columns"
+        :selection-type="false"
+        :expand-type="false"
+        show-index
+        index-text="#"
+        border
+        :show-row-hover="false">
+      </tree-table>
       <!-- 分页区域 -->
     </el-card>
   </div>
@@ -30,7 +40,11 @@ export default {
       },
       // 商品分类的数据列表 默认为空
       catelist:[],
-      total:0
+      total:0,
+      columns:[{
+        label:'分类名称',
+        prop:'cat_name'
+      }]
     }
   },
   created() {
