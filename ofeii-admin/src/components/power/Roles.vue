@@ -298,12 +298,13 @@ export default {
       console.log(this.rightslist)
 
       // 递归获取三级节点的id
-      this.defKeys = []
       this.getLeafKeys(role, this.defKeys)
       this.setRightDialogVisible = true
 
     },
+    // 监听分配权限的对话框负责
     setRightDialogClosed(){
+      this.defKeys = []
       // this.$refs.addRoleFormRef.resetFields()
     },
     // 通过递归获取所有角色的三级权限id并保存到defKeys数组中
