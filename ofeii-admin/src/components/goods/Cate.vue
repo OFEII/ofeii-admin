@@ -23,9 +23,21 @@
         index-text="#"
         border
         :show-row-hover="false">
+        <!-- template 是否有效 -->
         <template v-slot:isok="scope"> 
           <i class="el-icon-success" v-if="scope.row.cat_deleted === false" style="color: lightgreen;"></i>
           <i class="el-icon-error" v-else style="color: red;"></i>
+        </template>
+        <!-- template 是序 -->
+        <template v-slot:order="scope"> 
+          <el-tag size="mini" v-if="scope.row.cat_level === 0">一级</el-tag>
+          <el-tag type="success" size="mini" v-else-if="scope.row.cat_level === 1">二级</el-tag>
+          <el-tag type="warning" size="mini" v-else>三级</el-tag>
+        </template>
+        <!-- template 操作 -->
+        <template v-slot:option="scope"> 
+          <el-button type="primary" icon="el-icon-edit">编辑</el-button>
+          <el-button type="danger" icon="el-icon-delete">删除</el-button>
         </template>
       </tree-table>
       <!-- 分页区域 -->
@@ -57,7 +69,20 @@ export default {
           type:'template',
           // 表示当前这一列使用模版的名称
           template:'isok'
+        },{
+          label:'排序',
+          // 表示将当前列定义为模版列
+          type:'template',
+          // 表示当前这一列使用模版的名称
+          template:'order'
+        },{
+          label:'操作',
+          // 表示将当前列定义为模版列
+          type:'template',
+          // 表示当前这一列使用模版的名称
+          template:'option'
         }
+
       ]
     }
   },
