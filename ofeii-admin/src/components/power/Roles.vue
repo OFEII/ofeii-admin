@@ -122,6 +122,12 @@
       :visible.sync="setRightDialogVisible"
       width="30%"
       @close="setRightDialogClosed">
+      <!-- 树形控件 -->
+      <el-tree 
+        :data="rightslist" 
+        :props="treeProps" 
+        @node-click="handleNodeClick">
+      </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="setRightDialog=false">确 定</el-button>
@@ -151,7 +157,13 @@ export default {
         roleDesc:''
       },
       editRoleFormRules:{},
-      rightslist:{}
+      // 所有权限的数据
+      rightslist:{},
+      // 树形控件的属性绑定对象
+      treeProps: {
+        children: 'children',
+        label: 'authName'
+      }
 
     }
   },
