@@ -62,7 +62,7 @@
           <template v-slot="scope">
             <el-button type="primary" icon="el-icon-search" @click="showEditRoleDialog(scope.row.id)">编辑</el-button>
             <el-button type="danger" icon="el-icon-delete" @click="removeRoleById(scope.row.id)">删除</el-button>
-            <el-button type="warning" icon="el-icon-setting" @click="showSetRightDialog">分配权限</el-button>
+            <el-button type="warning" icon="el-icon-setting" @click="showSetRightDialog(scope.row)">分配权限</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -128,7 +128,8 @@
         :props="treeProps" 
         show-checkbox
         node-key="id"
-        default-expand-all>
+        default-expand-all
+        :default-checked-keys="defKeys">
       </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisible = false">取 消</el-button>
@@ -165,7 +166,9 @@ export default {
       treeProps: {
         children: 'children',
         label: 'authName'
-      }
+      },
+      // 默认选中的节点列表
+      defKeys:[]
 
     }
   },
@@ -286,19 +289,32 @@ export default {
         });          
       });
     },
-    async showSetRightDialog(){
+    async showSetRightDialog(role){
       const{data:res} = await this.$http.get('rights/tree')
       if(res.meta.status !== 200){
         return this.$message.error('获取所有权限数据失败')
       }
       this.rightslist = res.data
       console.log(this.rightslist)
+
+      // 递归获取三级节点的id
+      this.defKeys = []
+      this.getLeafKeys(role, this.defKeys)
       this.setRightDialogVisible = true
 
     },
     setRightDialogClosed(){
       // this.$refs.addRoleFormRef.resetFields()
-    },    
+    },
+    // 通过递归获取所有角色的三级权限id并保存到defKeys数组中
+    getLeafKeys(node,arr){
+      // 如果node节点不包含children属性 则是三级节点
+      if(!node.children){
+        return arr.push(node.id)
+      }
+      node.children.forEach(item=>
+        this.getLeafKeys(item,arr))
+    }
   }
 }
 </script>
