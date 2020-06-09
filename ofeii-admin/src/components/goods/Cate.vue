@@ -42,8 +42,8 @@
         </template>
         <!-- template 操作 -->
         <template v-slot:option="scope">
-          <el-button type="primary" icon="el-icon-edit">编辑</el-button>
-          <el-button type="danger" icon="el-icon-delete">删除</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="showEditCateDialog(scope.row.cat_id)">编辑</el-button>
+          <el-button type="danger" icon="el-icon-delete" @click="removeCateById(scope.row.cat_id)">删除</el-button>
         </template>
       </tree-table>
       <!-- 分页区域 -->
@@ -57,13 +57,16 @@
         :total="total"
       ></el-pagination>
     </el-card>
-
+    <!-- 添加分类dialog -->
     <el-dialog 
       title="添加分类" 
       :visible.sync="addCateDialogVisible" 
       width="50%"
       @close="addCateDialogClosed">
-      <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateFormRef" label-width="100px">
+      <el-form :model="addCateForm" 
+      :rules="addCateFormRules" 
+      ref="addCateFormRef" 
+      label-width="100px">
         <el-form-item label="分类名称" prop="cat_name">
           <el-input v-model="addCateForm.cat_name"></el-input>
         </el-form-item>
@@ -82,6 +85,25 @@
         <el-button type="primary" @click="addCate">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 编辑分类dialog -->
+    <el-dialog 
+      title="编辑分类" 
+      :visible.sync="editCateDialogVisible" 
+      width="50%"
+      @close="editCateDialogClosed">
+      <el-form :model="editCateForm" 
+      :rules="editCateFormRules" 
+      ref="editCateFormRef" 
+      label-width="100px">
+        <el-form-item label="分类名称" prop="cat_name">
+          <el-input v-model="editCateForm.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="addCateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editCateInfo">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -89,6 +111,7 @@
 export default {
   data() {
     return {
+      // 查询条件
       querInfo: {
         type: 3,
         pagenum: 1,
@@ -128,14 +151,14 @@ export default {
       ],
       addCateDialogVisible: false,
       addCateForm: {
+        cat_name: '',
         cat_pid: 0,
-        cat_name: "",
         cat_level: 0
       },
       // 添加分类的表单验证规则
       addCateFormRules: {
         cat_name: [
-          { required: true, message: "请添加分类，名称", trigger: "blur" }
+          { required: true, message: '请输入分类名称', trigger: 'blur' }
         ]
       },
       // 父级分类的列表
@@ -149,7 +172,14 @@ export default {
         checkStrictly: true
       },
       // 选中父级分类的id数组
-      selectedKeys: []
+      selectedKeys: [],
+      editCateDialogVisible: false,
+      editCateFormRules:{
+
+      },
+      editCateForm:{
+        cat_name: ''
+      }
     };
   },
   created() {
@@ -165,11 +195,11 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error("获取商品分类失败");
       }
-      console.log(res.data);
+      // console.log(res.data);
       this.catelist = res.data.result;
       this.total = res.data.total;
-      console.log(this.catelist);
-      console.log(this.total);
+      // console.log(this.catelist);
+      // console.log(this.total);
     },
     // 监听pagesize的变化
     handleSizeChange(newSize) {
@@ -183,8 +213,8 @@ export default {
     },
     // 点击按钮展示添加分类的对话框
     showAddCateDialog() {
-      this.addCateDialogVisible = true;
       this.getParentCateList();
+      this.addCateDialogVisible = true;
     },
     // 获取父级分类的数据失败
     async getParentCateList() {
@@ -195,7 +225,7 @@ export default {
         return this.$message.error("获取父级分类的数据失败");
       }
       this.parentCateList = res.data;
-      console.log(this.parentCateList);
+      // console.log(this.parentCateList);
     },
     parentCateChange() {
       console.log(this.selectedKeys);
@@ -212,19 +242,22 @@ export default {
         this.addCateForm.cat_level = 0;
       }
     },
+      // 点击按钮，添加新的分类
     addCate(){
-      // console.log(this.addCateForm)
       this.$refs.addCateFormRef.validate(async valid=>{
         if(!valid) return
-        const {data:res} = await this.$http.post('categories',this.addCateForm)
-        console.log(res)
+        const {data:res} = await this.$http.post(
+          'categories',
+          this.addCateForm
+        )
+        // console.log(res)
         if(res.meta.status !==201){
           return this.$message.error('添加分类失败！')
         }
         this.$message.success('添加分类成功')
         this.getCateList()
+        this.addCateDialogVisible = false
       })
-      this.addCateDialogVisible = false
       
     },
     // 监听对话框的关闭事件 重置表单数据
@@ -232,7 +265,60 @@ export default {
       this.$refs.addCateFormRef.resetFields()
       this.selectedKeys=[]
       this.addCateForm.cat_level = 0
-      this.addCateForm.pid = 0
+      this.addCateForm.cat_pid = 0
+    },
+    async showEditCateDialog(id){
+      const {data:res} = await this.$http.get("categories/"+id)
+      if (res.meta.status !== 200) {
+        return this.$message.error("查询用户信息失败");
+      }
+      this.editCateForm = res.data
+      this.editCateDialogVisible = true
+    },
+    editCateDialogClosed(){
+      this.$refs.editCateFormRef.resetFields();
+    },
+    // 修改分类信息并提交
+    editCateInfo() {
+      this.$refs.editCateFormRef.validate(async valid => {
+        if (!valid) return;
+        // 发起修改用户信息的数据请求
+        const { data: res } = await this.$http.put(
+          "categories/" + this.editCateForm.cat_id,
+          this.editCateForm
+        );
+        if (res.meta.status !== 200) {
+          return this.$message.error("更新分类名称失败😢");
+        }
+        this.editCateDialogVisible = false;
+        this.getCateList()
+        this.$message.success("更新分类名称成功🤗");
+      });
+    },
+    removeCateById(id){
+        this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          const { data: res } = await this.$http.delete("categories/" + id);
+          if (res.meta.status !== 200) {
+            return this.$message.error("删除用户失败😢");
+          }
+          this.$message.error("删除用户成功🤗");
+          this.getCateList();
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   }
 };
