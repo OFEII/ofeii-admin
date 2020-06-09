@@ -15,7 +15,6 @@
       </el-row>
       <!-- 表格 -->
       <tree-table
-
         class="treeTable"
         :data="catelist"
         :columns="columns"
@@ -59,10 +58,7 @@
       ></el-pagination>
     </el-card>
 
-    <el-dialog
-      title="添加分类"
-      :visible.sync="addCateDialogVisible"
-      width="50%">
+    <el-dialog title="添加分类" :visible.sync="addCateDialogVisible" width="50%">
       <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateForm" label-width="100px">
         <el-form-item label="分类名称" prop="cat_name">
           <el-input v-model="addCateForm.cat_name"></el-input>
@@ -73,13 +69,13 @@
             v-model="selectedKeys"
             :options="parentCateList"
             :props="cascaderProps"
-            @change="parentCateChange">
-          </el-cascader>
+            @change="parentCateChange"
+          ></el-cascader>
         </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="addCateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addCateDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addCate">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -127,31 +123,29 @@ export default {
         }
       ],
       addCateDialogVisible: false,
-      addCateForm:{
-        cat_pid:0,
-        cat_name:'',
-        cat_level:0
+      addCateForm: {
+        cat_pid: 0,
+        cat_name: "",
+        cat_level: 0
       },
       // 添加分类的表单验证规则
-      addCateFormRules:{
-        cat_name:[
-          {required:true,message:'请添加分类，名称',trigger:'blur'}
+      addCateFormRules: {
+        cat_name: [
+          { required: true, message: "请添加分类，名称", trigger: "blur" }
         ]
       },
       // 父级分类的列表
-      parentCateList:[],
+      parentCateList: [],
       // 指定级联选择器的配置对象
-      cascaderProps:{
-        expandTrigger: 'hover',
-        value:'cat_id',
-        label:'cat_name',
-        children:'children',
-        checkStrictly: true 
+      cascaderProps: {
+        expandTrigger: "hover",
+        value: "cat_id",
+        label: "cat_name",
+        children: "children",
+        checkStrictly: true
       },
       // 选中父级分类的id数组
-      selectedKeys:[]
-
-
+      selectedKeys: []
     };
   },
   created() {
@@ -174,41 +168,58 @@ export default {
       console.log(this.total);
     },
     // 监听pagesize的变化
-    handleSizeChange(newSize){
-      this.querInfo.pagesize = newSize
-      this.getCateList()
+    handleSizeChange(newSize) {
+      this.querInfo.pagesize = newSize;
+      this.getCateList();
     },
     // 监听pagenums 变化
-    handleCurrentChange(newPage){
-      this.querInfo.pagenum = newPage
-      this.getCateList()
+    handleCurrentChange(newPage) {
+      this.querInfo.pagenum = newPage;
+      this.getCateList();
     },
     // 点击按钮展示添加分类的对话框
-    showAddCateDialog(){
-      this.addCateDialogVisible = true
-      this.getParentCateList()
+    showAddCateDialog() {
+      this.addCateDialogVisible = true;
+      this.getParentCateList();
     },
     // 获取父级分类的数据失败
-    async getParentCateList(){
-      const {data:res} = await this.$http.get('categories',{params:{type:2}})
-      if(res.meta.status !== 200){
-        return this.$message.error('获取父级分类的数据失败')
+    async getParentCateList() {
+      const { data: res } = await this.$http.get("categories", {
+        params: { type: 2 }
+      });
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取父级分类的数据失败");
       }
-      this.parentCateList = res.data
-      console.log(this.parentCateList)
+      this.parentCateList = res.data;
+      console.log(this.parentCateList);
     },
-    parentCateChange(){
-      console.log(this.selectedKeys)
+    parentCateChange() {
+      console.log(this.selectedKeys);
+      // 如果selectedKeys数组中的length大于0 证明选中父级分类
+      if (this.selectedKeys.length > 0) {
+        this.addCateForm.cat_pid = this.selectedKeys[
+          this.selectedKeys.length - 1
+        ];
+        // 为当前分类的等级赋值
+        this.addCateForm.cat_level = this.selectedKeys.length;
+        return;
+      } else {
+        this.addCateForm.cat_pid = 0;
+        this.addCateForm.cat_level = 0;
+      }
+    },
+    addCate(){
+      console.log(this.addCateForm)
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.treeTable{
+.treeTable {
   margin-top: 1rem;
 }
-.el-cascader{
+.el-cascader {
   display: table-cell;
 }
 </style>
