@@ -20,6 +20,13 @@
         <el-col>
           <span>选择商品分类：</span>
           <!-- 选择商品级联的选择框 -->
+                    <!-- options指定数据源 -->
+          <el-cascader
+            v-model="selectedKeys"
+            :options="catelist"
+            :props="cascaderProps"
+            @change="handleChange"
+          ></el-cascader>
         </el-col>
       </el-row>
     </el-card>
@@ -30,7 +37,18 @@
 export default {
   data() {
     return {
-      catelist:[]
+      // 商品分类列表
+      catelist:[],
+      // 级联选择框的配置对象
+      cascaderProps:{
+        expandTrigger: "hover",
+        value: "cat_id",
+        label: "cat_name",
+        children: "children",
+        // checkStrictly: true
+      },
+      // 选中父级分类的id数组
+      selectedKeys: [],
     }
   },
   created() {
@@ -44,6 +62,9 @@ export default {
       }
       this.catelist = res.data
       console.log(this.catelist)
+    },
+    handleChange(){
+      console.log(this.selectedKeys)
     }
   },
 
