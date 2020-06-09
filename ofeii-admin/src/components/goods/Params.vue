@@ -29,6 +29,12 @@
           ></el-cascader>
         </el-col>
       </el-row>
+
+      <!-- tab 页签区域 -->
+      <el-tabs v-model="activeName" @tab-click="handleTabsClick">
+        <el-tab-pane label="动态参数" name="first">动态参数</el-tab-pane>
+        <el-tab-pane label="静态属性" name="second">静态属性</el-tab-pane>
+      </el-tabs>
     </el-card>
   </div>
 </template>
@@ -49,6 +55,7 @@ export default {
       },
       // 选中父级分类的id数组
       selectedCateKeys: [],
+      activeName:'first'
     }
   },
   created() {
@@ -70,6 +77,10 @@ export default {
       }
 
       console.log(this.selectedCateKeys)
+    },
+    // tabs 点击时间的处理函数
+    handleTabsClick(){
+      console.log(this.activeName)
     }
   },
 
