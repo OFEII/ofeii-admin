@@ -131,7 +131,8 @@ export default {
         cat_name:[
           {required:true,message:'请添加分类，名称',trigger:'blur'}
         ]
-      }
+      },
+      parentCteList:[]
 
 
     };
@@ -168,6 +169,16 @@ export default {
     // 点击按钮展示添加分类的对话框
     showAddCateDialog(){
       this.addCateDialogVisible = true
+      this.getParentCateList()
+    },
+    // 获取父级分类的数据失败
+    async getParentCateList(){
+      const {data:res} = await this.$http.get('categories',{params:{type:2}})
+      if(res.meta.status !== 200){
+        return this.$message.error('获取父级分类的数据失败')
+      }
+      this.parentCateList = res.data
+      console.log(this.parentCateList)
     }
   }
 };
