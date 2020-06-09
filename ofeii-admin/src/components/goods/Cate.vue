@@ -10,11 +10,12 @@
     <el-card>
       <el-row>
         <el-col :span="2">
-          <el-button type="primary">添加商品</el-button>
+          <el-button type="primary" @click="showAddCateDialog">添加商品</el-button>
         </el-col>
       </el-row>
       <!-- 表格 -->
       <tree-table
+
         class="treeTable"
         :data="catelist"
         :columns="columns"
@@ -57,6 +58,24 @@
         :total="total"
       ></el-pagination>
     </el-card>
+
+    <el-dialog
+      title="添加分类"
+      :visible.sync="addCateDialogVisible"
+      width="50%">
+      <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateForm" label-width="100px">
+        <el-form-item label="分类名称" prop="cat_name">
+          <el-input v-model="addCateForm.cat_name"></el-input>
+        </el-form-item>
+        <el-form-item label="父级分类">
+          <el-input v-model="addCateForm.level"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="addCateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCateDialogVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -100,7 +119,21 @@ export default {
           // 表示当前这一列使用模版的名称
           template: "option"
         }
-      ]
+      ],
+      addCateDialogVisible: false,
+      addCateForm:{
+        cat_pid:0,
+        cat_name:'',
+        cat_level:0
+      },
+      // 添加分类的表单验证规则
+      addCateFormRules:{
+        cat_name:[
+          {required:true,message:'请添加分类，名称',trigger:'blur'}
+        ]
+      }
+
+
     };
   },
   created() {
@@ -131,6 +164,10 @@ export default {
     handleCurrentChange(newPage){
       this.querInfo.pagenum = newPage
       this.getCateList()
+    },
+    // 点击按钮展示添加分类的对话框
+    showAddCateDialog(){
+      this.addCateDialogVisible = true
     }
   }
 };
