@@ -68,7 +68,13 @@
           <el-input v-model="addCateForm.cat_name"></el-input>
         </el-form-item>
         <el-form-item label="父级分类">
-          <el-input v-model="addCateForm.level"></el-input>
+          <!-- options指定数据源 -->
+          <el-cascader
+            v-model="selectedKeys"
+            :options="parentCateList"
+            :props="cascaderProps"
+            @change="parentCateChange">
+          </el-cascader>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -132,7 +138,18 @@ export default {
           {required:true,message:'请添加分类，名称',trigger:'blur'}
         ]
       },
-      parentCteList:[]
+      // 父级分类的列表
+      parentCateList:[],
+      // 指定级联选择器的配置对象
+      cascaderProps:{
+        expandTrigger: 'hover',
+        value:'cat_id',
+        label:'cat_name',
+        children:'children',
+        checkStrictly: true 
+      },
+      // 选中父级分类的id数组
+      selectedKeys:[]
 
 
     };
@@ -179,6 +196,9 @@ export default {
       }
       this.parentCateList = res.data
       console.log(this.parentCateList)
+    },
+    parentCateChange(){
+      console.log(this.selectedKeys)
     }
   }
 };
@@ -187,5 +207,8 @@ export default {
 <style lang="scss" scoped>
 .treeTable{
   margin-top: 1rem;
+}
+.el-cascader{
+  display: table-cell;
 }
 </style>
