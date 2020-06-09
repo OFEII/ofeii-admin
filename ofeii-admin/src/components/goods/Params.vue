@@ -22,7 +22,7 @@
           <!-- 选择商品级联的选择框 -->
                     <!-- options指定数据源 -->
           <el-cascader
-            v-model="selectedKeys"
+            v-model="selectedCateKeys"
             :options="catelist"
             :props="cascaderProps"
             @change="handleChange"
@@ -48,7 +48,7 @@ export default {
         // checkStrictly: true
       },
       // 选中父级分类的id数组
-      selectedKeys: [],
+      selectedCateKeys: [],
     }
   },
   created() {
@@ -61,10 +61,15 @@ export default {
         return this.$message.error('获取商品分类失败')
       }
       this.catelist = res.data
-      console.log(this.catelist)
+      // console.log(this.catelist)
     },
     handleChange(){
-      console.log(this.selectedKeys)
+      if(this.selectedCateKeys.length !== 3){
+        this.selectedCateKeys = []
+        return 
+      }
+
+      console.log(this.selectedCateKeys)
     }
   },
 
@@ -72,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cat_pot{
-  margin: 2rem 0;
+.cat_opt{
+  margin: 1.2rem 0;
 }
 </style>
