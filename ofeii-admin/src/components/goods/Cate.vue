@@ -213,7 +213,19 @@ export default {
       }
     },
     addCate(){
-      console.log(this.addCateForm)
+      // console.log(this.addCateForm)
+      this.$refs.addCateFormRef.validate(async valid=>{
+        if(!valid) return
+        const {data:res} = await this.$http.post('categories',this.addCateForm)
+        console.log(res)
+        if(res.meta.status !==201){
+          return this.$message.error('添加分类失败！')
+        }
+        this.$message.success('添加分类成功')
+        this.getCateList()
+      })
+      this.addCateDialogVisible = false
+      
     },
     // 监听对话框的关闭事件 重置表单数据
     addCateDialogClosed(){
