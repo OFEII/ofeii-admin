@@ -58,8 +58,12 @@
       ></el-pagination>
     </el-card>
 
-    <el-dialog title="添加分类" :visible.sync="addCateDialogVisible" width="50%">
-      <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateForm" label-width="100px">
+    <el-dialog 
+      title="添加分类" 
+      :visible.sync="addCateDialogVisible" 
+      width="50%"
+      @close="addCateDialogClosed">
+      <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateFormRef" label-width="100px">
         <el-form-item label="分类名称" prop="cat_name">
           <el-input v-model="addCateForm.cat_name"></el-input>
         </el-form-item>
@@ -210,6 +214,13 @@ export default {
     },
     addCate(){
       console.log(this.addCateForm)
+    },
+    // 监听对话框的关闭事件 重置表单数据
+    addCateDialogClosed(){
+      this.$refs.addCateFormRef.resetFields()
+      this.selectedKeys=[]
+      this.addCateForm.cat_level = 0
+      this.addCateForm.pid = 0
     }
   }
 };
