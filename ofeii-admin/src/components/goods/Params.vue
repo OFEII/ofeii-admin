@@ -3,7 +3,7 @@
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item></el-breadcrumb-item>
+      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
       <el-breadcrumb-item>参数列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图区域 -->
@@ -16,7 +16,7 @@
         show-icon>
       </el-alert>
       <!-- 选择商品分类区 -->
-      <el-row class="cat_opt" justify="start">
+      <el-row class="cat_opt">
         <el-col>
           <span>选择商品分类：</span>
           <!-- 选择商品级联的选择框 -->
@@ -30,14 +30,21 @@
 export default {
   data() {
     return {
-      
+      catelist:[]
     }
   },
   created() {
-    
+    this.getCateList()
   },
   methods: {
-    
+    async getCateList(){
+      const {data:res} = await this.$http.get('categories')
+      if(res.meta.status !== 200){
+        return this.$message.error('获取商品分类失败')
+      }
+      this.catelist = res.data
+      console.log(this.catelist)
+    }
   },
 
 }
@@ -45,6 +52,6 @@ export default {
 
 <style lang="scss" scoped>
 .cat_pot{
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 </style>
