@@ -69,7 +69,7 @@ export default {
             type: "success"
           });
         }
-        console.log(res);
+        // console.log(res);
         window.sessionStorage.setItem("token", res.data.token);
         this.$router.push("/home");
       });

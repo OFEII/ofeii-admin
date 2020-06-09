@@ -228,7 +228,7 @@ export default {
       // console.log(this.parentCateList);
     },
     parentCateChange() {
-      console.log(this.selectedKeys);
+      // console.log(this.selectedKeys);
       // 如果selectedKeys数组中的length大于0 证明选中父级分类
       if (this.selectedKeys.length > 0) {
         this.addCateForm.cat_pid = this.selectedKeys[

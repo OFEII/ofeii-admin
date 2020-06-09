@@ -210,7 +210,7 @@ export default {
     },
     // 编辑用户信息的dialog
     async showEditRoleDialog(id){
-      console.log(id)
+      // console.log(id)
       const{data:res} = await this.$http.get('roles/'+id)
       if(res.meta.status !==200){
         return this.$message.error('查询用户信息失败')
@@ -233,8 +233,8 @@ export default {
           roleName: this.editRoleForm.roleName,
           roleDesc: this.editRoleForm.roleDesc
         })
-        console.log('roles/'+ this.editRoleForm.roleId)
-        console.log('roles/'+ this.editRoleForm)
+        // console.log('roles/'+ this.editRoleForm.roleId)
+        // console.log('roles/'+ this.editRoleForm)
 
         if(res.meta.status !== 200){
           return this.$message.error('更新用户信息失败😢')
@@ -299,7 +299,7 @@ export default {
         return this.$message.error('获取所有权限数据失败')
       }
       this.rightslist = res.data
-      console.log(this.rightslist)
+      // console.log(this.rightslist)
 
       // 递归获取三级节点的id
       this.getLeafKeys(role, this.defKeys)
