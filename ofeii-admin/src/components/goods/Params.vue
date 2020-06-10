@@ -41,7 +41,13 @@
             border
             stripe>
             <!-- 展开行 -->
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template v-slot="scope">
+                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable>
+                  {{item}}
+                </el-tag>
+              </template>
+            </el-table-column>
             <!-- 索引行 -->
             <el-table-column type="index" label="🚀"></el-table-column>
             <el-table-column prop="attr_name" label="参数名称"></el-table-column>
@@ -198,6 +204,10 @@ export default {
       }
       this.$message.success('获取对应面板数据ok')
       console.log(res.data)
+      res.data.forEach(item => {
+        item.attr_vals = item.attr_vals.split(' ')
+        
+      });
       if(this.activeName === 'many'){
         this.manyTableData = res.data
       }else{
@@ -289,5 +299,9 @@ export default {
 <style lang="scss" scoped>
 .cat_opt{
   margin: 1.2rem 0;
+}
+
+.el-tag{
+  margin: 0 1rem;
 }
 </style>
