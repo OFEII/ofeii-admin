@@ -205,7 +205,7 @@ export default {
       this.$message.success('获取对应面板数据ok')
       console.log(res.data)
       res.data.forEach(item => {
-        item.attr_vals = item.attr_vals.split(' ')
+        item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') :[]
         
       });
       if(this.activeName === 'many'){
