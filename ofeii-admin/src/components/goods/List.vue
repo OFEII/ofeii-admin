@@ -8,6 +8,7 @@
     </el-breadcrumb>
     <!-- 卡片视图区域 -->
     <el-card>
+      <!-- 搜索添加表头 -->
       <el-row :gutter="20">
         <el-col :span="8">
           <el-input placeholder="请输入内容">
@@ -19,6 +20,27 @@
         </el-col>
 
       </el-row>
+
+      <!-- table表格区域 -->
+      <el-table
+        :data="goodslist"
+        border
+        stripe>
+        <el-table-column type="index" label="🚄"></el-table-column>
+        <el-table-column label="商品名称" prop="goods_name"></el-table-column>
+        <el-table-column label="商品价格(元)" prop="goods_price" width="140px"></el-table-column>
+        <el-table-column label="商品重量(kg)" prop="goods_weight" width="140px"></el-table-column>
+        <el-table-column label="创建时间" prop="add_time" width="200px"></el-table-column>
+        <el-table-column label="操作" width="400px">
+          <template v-slot="scope">
+            <el-button type="primary" icon="el-icon-edit"></el-button>
+            <el-button type="danger" icon="el-icon-delete"></el-button>
+          </template>
+        </el-table-column>
+
+
+
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -33,8 +55,7 @@ export default {
         pagesize:10
       },
       total:0,
-      goodlist:[]
-      
+      goodslist:[]
     }
   },
   created() {
@@ -48,8 +69,8 @@ export default {
       if(res.meta.status !== 200){
         return this.$message.error('获取商品列表数据失败😢')
       }
-      this.goodlist = res.data
-      console.log(this.goodlist)
+      this.goodslist = res.data.goods
+      console.log(this.goodslist)
     }
     
   },
