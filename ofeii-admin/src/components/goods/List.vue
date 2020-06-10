@@ -27,13 +27,30 @@
 export default {
   data() {
     return {
+      queryInfo:{
+        query:'',
+        pagenum:1,
+        pagesize:10
+      },
+      total:0,
+      goodlist:[]
       
     }
   },
-  computed: {
-    
+  created() {
+    this.getGoodsList()
   },
   methods: {
+    async getGoodsList(){
+      const {data:res} = await this.$http.get('goods',{
+        params: this.queryInfo
+      })
+      if(res.meta.status !== 200){
+        return this.$message.error('获取商品列表数据失败😢')
+      }
+      this.goodlist = res.data
+      console.log(this.goodlist)
+    }
     
   },
 
