@@ -54,8 +54,8 @@
                   v-model="scope.row.inputValue"
                   ref="saveTagInput"
                   size="small"
-                  @keyup.enter.native="handleInputConfirm"
-                  @blur="handleInputConfirm"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
                 >
                 </el-input>
                 <!-- 添加按钮 -->
@@ -96,8 +96,8 @@
                   v-model="scope.row.inputValue"
                   ref="saveTagInput"
                   size="small"
-                  @keyup.enter.native="handleInputConfirm"
-                  @blur="handleInputConfirm"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
                 >
                 </el-input>
                 <!-- 添加按钮 -->
@@ -330,8 +330,14 @@ export default {
         });
     },
     // 文本框失去焦点 或enter
-    handleInputConfirm(){
-      console.log('ok')
+    handleInputConfirm(row){
+      if(row.inputValue.trim().length === 0){
+        row.inputValue = ''
+        row.inputVisible = false
+        return
+      }
+      // 如果没有return则需要后续处理
+
     },
     showInput(row){
       row.inputVisible = true
