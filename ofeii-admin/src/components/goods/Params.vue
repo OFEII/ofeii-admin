@@ -44,7 +44,7 @@
             <el-table-column type="expand">
               <template v-slot="scope">
                 <!-- 循环渲染tag标签 -->
-                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable>
+                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable @close="handleClose(i,scope.row)">
                   {{item}}
                 </el-tag>
                 <!-- 输入文本框 -->
@@ -86,7 +86,7 @@
             <el-table-column type="expand">
               <template v-slot="scope">
                 <!-- 循环渲染tag标签 -->
-                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable>
+                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable @close="handleClose(i,scope.row)">
                   {{item}}
                 </el-tag>
                 <!-- 输入文本框 -->
@@ -338,15 +338,7 @@ export default {
       }
       // 如果没有return则需要后续处理
       row.attr_vals.push(row.inputValue.trim())
-      const {data:res} = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`,{
-        attr_name: row.attr_name,
-        attr_sel: row.attr_sel,
-        attr_vals: row.attr_vals.join(' ')
-      })
-      if(res.meta.status !== 200){
-        return this.$message.error('修改参数项失败')
-      }
-      return this.$message.success('修改参数项成功')
+      this.saveAttrVals(row)
       row.inputValue = ''
       row.inputVisible = false
     },
@@ -358,6 +350,22 @@ export default {
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
+    },
+    handleClose(i,row){
+      row.attr_vals.splice(i,1)
+      this.saveAttrVals(row)
+    },
+    // 将对attr_vals的操作保存到数据库中
+    async saveAttrVals(row){
+      const {data:res} = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`,{
+        attr_name: row.attr_name,
+        attr_sel: row.attr_sel,
+        attr_vals: row.attr_vals.join(' ')
+      })
+      if(res.meta.status !== 200){
+        return this.$message.error('修改参数项失败')
+      }
+      return this.$message.success('修改参数项成功')
     }
   },
 
