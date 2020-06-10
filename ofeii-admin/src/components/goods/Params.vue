@@ -330,14 +330,25 @@ export default {
         });
     },
     // 文本框失去焦点 或enter
-    handleInputConfirm(row){
+    async handleInputConfirm(row){
       if(row.inputValue.trim().length === 0){
         row.inputValue = ''
         row.inputVisible = false
         return
       }
       // 如果没有return则需要后续处理
-
+      row.attr_vals.push(row.inputValue.trim())
+      const {data:res} = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`,{
+        attr_name: row.attr_name,
+        attr_sel: row.attr_sel,
+        attr_vals: row.attr_vals.join(' ')
+      })
+      if(res.meta.status !== 200){
+        return this.$message.error('修改参数项失败')
+      }
+      return this.$message.success('修改参数项成功')
+      row.inputValue = ''
+      row.inputVisible = false
     },
     showInput(row){
       row.inputVisible = true
