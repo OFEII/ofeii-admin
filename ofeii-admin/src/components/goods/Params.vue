@@ -91,7 +91,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addParams">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -183,6 +183,21 @@ export default {
     
     addDialogClosed(){
       this.$refs.addFormRef.resetFields()
+    },
+    addParams(){
+      this.$refs.addFormRef.validate(async valid=>{
+        if(!valid) return
+        const {data:res} = await this.$http.post(`categories/${this.cateId}/attributes`,{
+          attr_name:this.addForm.attr_name,
+          attr_sel: this.activeName
+        })
+        if(res.meta.status !==201){
+          return this.$message.error('添加参数失败😢')
+        }
+        this.$message.success('添加成功')
+        this.addDialogVisible = false
+        this.getParamsData()
+      })
     }
 
   },
