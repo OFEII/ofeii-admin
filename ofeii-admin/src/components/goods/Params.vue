@@ -86,6 +86,15 @@ export default {
       // console.log(this.catelist)
     },
     async handleChange(){
+      this.getParamsData()
+    },
+    // tabs 点击时间的处理函数
+    handleTabsClick(){
+      console.log(this.activeName)
+      this.getParamsData()
+    },
+    // 获取参数的列表数据
+    async getParamsData(){
       if(this.selectedCateKeys.length !== 3){
         this.selectedCateKeys = []
         return 
@@ -100,11 +109,7 @@ export default {
       }
       this.$message.success('获取对应面板数据ok')
       console.log(res.data)
-    },
-    // tabs 点击时间的处理函数
-    handleTabsClick(){
-      console.log(this.activeName)
-    },
+    }
 
   },
 
