@@ -335,6 +335,12 @@ export default {
     },
     showInput(row){
       row.inputVisible = true
+      // 自动获取文本框焦点
+      // 第二个refs是原生dom对象
+      // $nextTick 当页面上页面重新被元素重新渲染之后，才会调用回调函数中的代码
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
     }
   },
 
