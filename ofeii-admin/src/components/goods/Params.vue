@@ -50,8 +50,8 @@
                 <!-- 输入文本框 -->
                 <el-input
                   class="input-new-tag"
-                  v-if="inputVisible"
-                  v-model="inputValue"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
                   ref="saveTagInput"
                   size="small"
                   @keyup.enter.native="handleInputConfirm"
@@ -59,7 +59,7 @@
                 >
                 </el-input>
                 <!-- 添加按钮 -->
-                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag</el-button>
               </template>
             </el-table-column>
             <!-- 索引行 -->
@@ -83,7 +83,27 @@
             border
             stripe>
             <!-- 展开行 -->
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template v-slot="scope">
+                <!-- 循环渲染tag标签 -->
+                <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable>
+                  {{item}}
+                </el-tag>
+                <!-- 输入文本框 -->
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                >
+                </el-input>
+                <!-- 添加按钮 -->
+                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag</el-button>
+              </template>
+            </el-table-column>
             <!-- 索引行 -->
             <el-table-column type="index" label="🚀"></el-table-column>
             <el-table-column prop="attr_name" label="参数名称"></el-table-column>
@@ -167,9 +187,9 @@ export default {
         attr_name:[{required:true,message:'请输入参数',trigger:'blur'}]
       },
       // 控制按钮与文本框的切换显示
-      inputVisible:false,
+      // inputVisible:false,
       // 文本框输入的内容
-      inputValue:''
+      // inputValue:''
 
     }
   },
@@ -224,7 +244,8 @@ export default {
       console.log(res.data)
       res.data.forEach(item => {
         item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') :[]
-        
+        item.inputVisible = false
+        item.inputValue = ''
       });
       if(this.activeName === 'many'){
         this.manyTableData = res.data
@@ -312,10 +333,9 @@ export default {
     handleInputConfirm(){
       console.log('ok')
     },
-    showInput(){
-      this.inputVisible = true
+    showInput(row){
+      row.inputVisible = true
     }
-
   },
 
 }
