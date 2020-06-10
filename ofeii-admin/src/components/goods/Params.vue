@@ -34,7 +34,7 @@
       <el-tabs v-model="activeName" @tab-click="handleTabsClick">
         <!-- 添加动态参数的面板 -->
         <el-tab-pane label="动态参数" name="many">
-          <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加参数</el-button>
+          <el-button type="primary" size="mini" :disabled="isBtnDisabled" @click="addDialogVisible=true">添加参数</el-button>
           <!-- 动态参数表格 -->
           <el-table
             :data="manyTableData"
@@ -56,7 +56,7 @@
         </el-tab-pane>
         <!-- 添加静态属性的面板 -->
         <el-tab-pane label="静态属性" name="only">
-          <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加属性</el-button>
+          <el-button type="primary" size="mini" :disabled="isBtnDisabled" @click="addDialogVisible=true">添加属性</el-button>
           <!-- 静态参数表格 -->
           <el-table
             :data="onlyTableData"
@@ -78,6 +78,22 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
+    <!-- 添加参数的对话框 -->
+    <el-dialog
+      :title="'添加'+titleText"
+      :visible.sync="addDialogVisible"
+      width="60%"
+      @close="addDialogClosed">
+      <el-form :model="addForm" :rules="addFormRules" ref="addFormRef">
+        <el-form-item :label="titleText" label-width="100px" prop="attr_name">
+          <el-input v-model="addForm.attr_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -99,7 +115,14 @@ export default {
       selectedCateKeys: [],
       activeName:'many',
       onlyTableData:[],
-      manyTableData:[]
+      manyTableData:[],
+      addDialogVisible: false,
+      addForm:{
+        attr_name:''
+      },
+      addFormRules:{
+        attr_name:[{required:true,message:'请输入参数',trigger:'blur'}]
+      }
     }
   },
   created() {
@@ -112,6 +135,10 @@ export default {
     // 当前选中三级分类的id
     cateId(){
       return (this.selectedCateKeys.length ===3) ? this.selectedCateKeys[2] : null
+    },
+    // 动态计算dialog的标题
+    titleText(){
+      return this.activeName === 'many' ? '动态参数':'静态属性'
     }
   },
   methods: {
@@ -152,6 +179,10 @@ export default {
       }else{
         this.onlyTableData = res.data
       }
+    },
+    
+    addDialogClosed(){
+      this.$refs.addFormRef.resetFields()
     }
 
   },
