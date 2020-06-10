@@ -47,7 +47,7 @@
             <el-table-column prop="attr_name" label="参数名称"></el-table-column>
             <el-table-column label="操作">
               <template v-slot="scope">
-                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog">编辑</el-button>
                 <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
               </template>
             </el-table-column>
@@ -69,7 +69,7 @@
             <el-table-column prop="attr_name" label="参数名称"></el-table-column>
             <el-table-column label="操作">
               <template v-slot="scope">
-                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog">编辑</el-button>
                 <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
               </template>
             </el-table-column>
@@ -92,6 +92,22 @@
       <div slot="footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addParams">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 添加参数的对话框 -->
+    <el-dialog
+      :title="'添加'+titleText"
+      :visible.sync="editDialogVisible"
+      width="60%"
+      @close="editDialogClosed">
+      <el-form :model="editForm" :rules="editFormRules" ref="editFormRef">
+        <el-form-item :label="titleText" label-width="100px" prop="attr_name">
+          <el-input v-model="editForm.attr_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editParams">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -122,7 +138,15 @@ export default {
       },
       addFormRules:{
         attr_name:[{required:true,message:'请输入参数',trigger:'blur'}]
-      }
+      },
+      editDialogVisible:false,
+      editForm:{
+        attr_name:''
+      },
+      editFormRules:{
+        attr_name:[{required:true,message:'请输入参数',trigger:'blur'}]
+      },
+
     }
   },
   created() {
@@ -198,6 +222,15 @@ export default {
         this.addDialogVisible = false
         this.getParamsData()
       })
+    },
+    showEditDialog(){
+      this.editDialogVisible = true
+    },
+    editDialogClosed(){
+      this.$refs.editFormRef.resetFields()
+    },
+    editParams(){
+
     }
 
   },
