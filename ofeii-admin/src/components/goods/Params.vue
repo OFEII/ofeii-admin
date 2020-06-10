@@ -33,11 +33,11 @@
       <!-- tab 页签区域 -->
       <el-tabs v-model="activeName" @tab-click="handleTabsClick">
         <!-- 添加动态参数的面板 -->
-        <el-tab-pane label="动态参数" name="first">
+        <el-tab-pane label="动态参数" name="many">
           <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加参数</el-button>
         </el-tab-pane>
         <!-- 添加静态属性的面板 -->
-        <el-tab-pane label="静态属性" name="second">
+        <el-tab-pane label="静态属性" name="only">
           <el-button type="primary" size="mini" :disabled="isBtnDisabled">添加属性</el-button>
         </el-tab-pane>
       </el-tabs>
@@ -61,7 +61,7 @@ export default {
       },
       // 选中父级分类的id数组
       selectedCateKeys: [],
-      activeName:'first'
+      activeName:'many'
     }
   },
   created() {
@@ -70,6 +70,10 @@ export default {
   computed: {
     isBtnDisabled(){
       return (this.selectedCateKeys.length !== 3)? true : false
+    },
+    // 当前选中三级分类的id
+    cateId(){
+      return (this.selectedCateKeys.length ===3) ? this.selectedCateKeys[2] : null
     }
   },
   methods: {
@@ -81,18 +85,27 @@ export default {
       this.catelist = res.data
       // console.log(this.catelist)
     },
-    handleChange(){
+    async handleChange(){
       if(this.selectedCateKeys.length !== 3){
         this.selectedCateKeys = []
         return 
       }
-
       console.log(this.selectedCateKeys)
+      // 根据所选分类的id和当前所处的面板获取对应的参数
+      const {data:res} = await this.$http.get(`categories/${this.cateId}/attributes`,{
+        params:{sel:this.activeName}
+      })
+      if(res.meta.status !== 200){
+        return this.$message.error('获取对应面板数据失败')
+      }
+      this.$message.success('获取对应面板数据ok')
+      console.log(res.data)
     },
     // tabs 点击时间的处理函数
     handleTabsClick(){
       console.log(this.activeName)
-    }
+    },
+
   },
 
 }
