@@ -109,6 +109,11 @@ export default {
       }
       this.$message.success('获取对应面板数据ok')
       console.log(res.data)
+      if(this.activeName === 'many'){
+        this.manyTableData = res.data
+      }else{
+        this.onlyTableData = res.data
+      }
     }
 
   },
