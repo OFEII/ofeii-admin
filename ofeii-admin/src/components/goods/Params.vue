@@ -43,9 +43,23 @@
             <!-- 展开行 -->
             <el-table-column type="expand">
               <template v-slot="scope">
+                <!-- 循环渲染tag标签 -->
                 <el-tag v-for="(item, i) in scope.row.attr_vals" :key="i" closable>
                   {{item}}
                 </el-tag>
+                <!-- 输入文本框 -->
+                <el-input
+                  class="input-new-tag"
+                  v-if="inputVisible"
+                  v-model="inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                >
+                </el-input>
+                <!-- 添加按钮 -->
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
               </template>
             </el-table-column>
             <!-- 索引行 -->
@@ -152,6 +166,10 @@ export default {
       editFormRules:{
         attr_name:[{required:true,message:'请输入参数',trigger:'blur'}]
       },
+      // 控制按钮与文本框的切换显示
+      inputVisible:false,
+      // 文本框输入的内容
+      inputValue:''
 
     }
   },
@@ -289,6 +307,13 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    // 文本框失去焦点 或enter
+    handleInputConfirm(){
+      console.log('ok')
+    },
+    showInput(){
+      this.inputVisible = true
     }
 
   },
@@ -302,6 +327,9 @@ export default {
 }
 
 .el-tag{
-  margin: 0 1rem;
+  margin: .8rem;
+}
+.input-new-tag{
+  width: 120px;
 }
 </style>
