@@ -20,7 +20,7 @@
         <el-col>
           <span>选择商品分类：</span>
           <!-- 选择商品级联的选择框 -->
-                    <!-- options指定数据源 -->
+          <!-- options指定数据源 -->
           <el-cascader
             v-model="selectedCateKeys"
             :options="catelist"
@@ -230,6 +230,8 @@ export default {
     async getParamsData(){
       if(this.selectedCateKeys.length !== 3){
         this.selectedCateKeys = []
+        this.manyTableData = []
+        this.onlyTableData = []
         return 
       }
       console.log(this.selectedCateKeys)
