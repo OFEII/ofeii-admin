@@ -50,9 +50,9 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="querInfo.pagenum"
+        :current-page="queryInfo.pagenum"
         :page-sizes="[3, 5, 10, 25]"
-        :page-size="querInfo.pagesize"
+        :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
@@ -112,7 +112,7 @@ export default {
   data() {
     return {
       // 查询条件
-      querInfo: {
+      queryInfo: {
         type: 3,
         pagenum: 1,
         pagesize: 5
@@ -189,7 +189,7 @@ export default {
     // 获取商品分类数据
     async getCateList() {
       const { data: res } = await this.$http.get("categories", {
-        params: this.querInfo
+        params: this.queryInfo
       });
 
       if (res.meta.status !== 200) {
@@ -203,12 +203,12 @@ export default {
     },
     // 监听pagesize的变化
     handleSizeChange(newSize) {
-      this.querInfo.pagesize = newSize;
+      this.queryInfo.pagesize = newSize;
       this.getCateList();
     },
     // 监听pagenums 变化
     handleCurrentChange(newPage) {
-      this.querInfo.pagenum = newPage;
+      this.queryInfo.pagenum = newPage;
       this.getCateList();
     },
     // 点击按钮展示添加分类的对话框

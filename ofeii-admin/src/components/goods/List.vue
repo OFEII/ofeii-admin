@@ -42,6 +42,18 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[5, 10, 25, 100]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        background
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -71,7 +83,16 @@ export default {
         return this.$message.error('获取商品列表数据失败😢')
       }
       this.goodslist = res.data.goods
+      this.total = res.data.total;
       console.log(this.goodslist)
+    },
+    handleSizeChange(newSize){
+      this.queryInfo.pagesize = newSize
+      this.getGoodsList()
+    },
+    handleCurrentChange(newPage){
+      this.queryInfo.pagenum = newPage
+      this.getGoodsList()
     }
     
   },
