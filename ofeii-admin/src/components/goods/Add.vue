@@ -25,9 +25,14 @@
           <el-step title="商品内容"></el-step>
           <el-step title="完成"></el-step>
         </el-steps>
-        <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px" label-position="top">
+        <el-form 
+          :model="addForm" 
+          :rules="addFormRules" 
+          ref="addFormRef" 
+          label-width="100px" 
+          label-position="top">
         <!-- tab区域 -->
-          <el-tabs v-model="activeIndex" :tab-position="tabPosition">
+          <el-tabs v-model="activeIndex" :tab-position="tabPosition" :before-leave="beforeTabLeave">
             <el-tab-pane label="基本信息" name="0">基本信息</el-tab-pane>
               <el-form-item label="商品名称" prop="goods_name">
                 <el-input v-model="addForm.goods_name"></el-input>
@@ -111,6 +116,15 @@ export default {
     console.log(this.addForm.goods_cat)
     if(this.addForm.goods_cat.length !== 3){
       this.addForm.goods_cat = []
+    }
+  },
+  beforeTabLeave(activeName,oldActiveName){
+    // console.log('离开'+oldActiveName)
+    // console.log('进入'+activeName)
+    // return false
+    if(oldActiveName === '0' && this.addForm.goods_cat.length !==3){
+      this.$message.error('请先选择商品分类😛')
+      return false
     }
   }
     
