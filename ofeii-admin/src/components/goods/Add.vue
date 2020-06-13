@@ -110,7 +110,8 @@ export default {
         value: "cat_id",
         children: "children"
       },
-      manyTableData: []
+      manyTableData: [],
+      onlyTableData: [],
     };
   },
   created() {
@@ -152,8 +153,7 @@ export default {
     async tabClicked() {
       // console.log(this.activeIndex)
       if (this.activeIndex === "1") {
-        const { data: res } = await this.$http.get(
-          `categories/${this.cateId}/attributes`,
+        const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`,
           {
             params: { sel: "many" }
           }
@@ -168,6 +168,18 @@ export default {
         this.manyTableData = res.data;
         console.log(this.manyTableData);
         this.$message.success("获取动态参数列表成功🥰");
+      }else if(this.activeIndex === '2'){
+        const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`,
+          {
+            params: { sel: "only" }
+          }
+        );
+        if (res.meta.status !== 200) {
+          return this.$message.error("获取静态属性列表失败😢");
+        }
+        this.onlyTableData = res.data;
+        console.log(this.onlyTableData);
+        this.$message.success("获取静态属性列表成功🥰");
       }
     }
   }
