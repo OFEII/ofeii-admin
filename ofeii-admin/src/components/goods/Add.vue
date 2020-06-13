@@ -68,7 +68,17 @@
               <el-input v-model="item.attr_vals" ></el-input>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+          <el-tab-pane label="商品图片" name="3">
+            <!-- action 图片上传的ip地址 -->
+            <el-upload
+              :action="uploadURL"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :file-list="fileList"
+              list-type="picture">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
         </el-tabs>
       </el-form>
@@ -116,6 +126,7 @@ export default {
       },
       manyTableData: [],
       onlyTableData: [],
+      uploadURL:'http://127.0.0.1:8888/api/private/v1/upload'
     };
   },
   created() {
@@ -185,6 +196,13 @@ export default {
         console.log(this.onlyTableData);
         this.$message.success("获取静态属性列表成功🥰");
       }
+    },
+    // 处理图片预览效果
+    handlePreview(){
+
+    },
+    handleRemove(){
+
     }
   }
 };
