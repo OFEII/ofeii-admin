@@ -178,4 +178,7 @@ export default {
 .el-steps {
   margin: 2rem 0;
 }
+.el-checkbox{
+  margin: 0 1rem 0 0 !important;
+}
 </style>
