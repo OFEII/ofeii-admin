@@ -108,6 +108,9 @@ export default {
   },
   handleChange(){
     console.log(this.addForm.goods_cat)
+    if(this.addForm.goods_cat.length !== 3){
+      this.addForm.goods_cat = []
+    }
   }
     
   },
