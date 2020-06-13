@@ -106,6 +106,7 @@ export default {
     this.catelist = res.data
     console.log(this.catelist)
   },
+  // 级联选择器中选项变化就会触发
   handleChange(){
     console.log(this.addForm.goods_cat)
     if(this.addForm.goods_cat.length !== 3){
