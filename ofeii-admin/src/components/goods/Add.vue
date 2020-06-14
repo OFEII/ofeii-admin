@@ -206,8 +206,12 @@ export default {
     handlePreview(){
 
     },
-    handleRemove(){
-
+    handleRemove(file){
+      console.log(file)
+      const filePath = file.response.data.tmp_path
+      const i = this.addForm.pics.findIndex(x => x.pic === filePath)
+      this.addForm.pics.splice(i, 1)
+      console.log(this.addForm)
     },
     handleSuccess(response, file, fileList){
       // 1.concat
