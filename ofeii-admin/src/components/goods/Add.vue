@@ -74,8 +74,8 @@
               :action="uploadURL"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
-              :file-list="fileList"
-              list-type="picture">
+              list-type="picture"
+              :headers="headerObj">
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
@@ -126,7 +126,10 @@ export default {
       },
       manyTableData: [],
       onlyTableData: [],
-      uploadURL:'http://127.0.0.1:8888/api/private/v1/upload'
+      uploadURL:'http://127.0.0.1:8888/api/private/v1/upload',
+      headerObj:{
+        Authorization: window.sessionStorage.getItem('token')
+      }
     };
   },
   created() {
