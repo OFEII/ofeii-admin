@@ -116,7 +116,8 @@ export default {
         // 商品所属的分类数组
         goods_cat: [],
         pics:[],
-        goods_introduce:''
+        goods_introduce:'',
+        attrs:[]
       },
       addFormRules: {
         goods_name: [
@@ -248,7 +249,24 @@ export default {
         // lodash cloneDeep(obj)
         const form =  _.cloneDeep(this.addForm)
         form.goods_cat = form.goods_cat.join(',')
-        // const {data:res} = this.$http.post(`goods`)
+        
+        // 处理动态参数
+        this.manyTableData.forEach(item => {
+          const newInfo = {
+              attr_id: item.attr_id,
+              attr_value: item.attr_vals.join(' ')
+            }
+          this.addForm.attrs.push(newInfo)
+        })
+        // 处理静态属性
+        this.onlyTableData.forEach(item => {
+          const newInfo = {
+              attr_id: item.attr_id,
+              attr_value: item.attr_vals
+            }
+          this.addForm.attrs.push(newInfo)
+        })        
+        form.attrs = this.addForm.attrs
         console.log(form)
       })
     }
