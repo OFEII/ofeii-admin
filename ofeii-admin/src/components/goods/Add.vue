@@ -243,7 +243,7 @@ export default {
     },
     addGood(){
       console.log(this.addForm)
-      this.$refs.addFormRef.validate(valid =>{
+      this.$refs.addFormRef.validate(async valid =>{
         if(!valid) return this.$message.error('请填写必要的表单项😢')
         // 执行添加的业务
         // lodash cloneDeep(obj)
@@ -267,7 +267,14 @@ export default {
           this.addForm.attrs.push(newInfo)
         })        
         form.attrs = this.addForm.attrs
-        console.log(form)
+        // console.log(form)
+
+        const {data:res} = await this.$http.post('goods',form)
+        if(res.meta.status !== 201){
+          return this.$message.error('添加商品失败')
+        }
+          this.$message.success('添加商品成功')
+          this.$router.push('/goods')
       })
     }
   }
