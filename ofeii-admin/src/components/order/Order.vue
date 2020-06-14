@@ -37,7 +37,7 @@
         <el-table-column label="操作">
           <template v-slot="scope">
             <el-button size="mini" type="primary" icon="el-icon-edit" @click="showBox"></el-button>
-            <el-button size="mini" type="success" icon="el-icon-location"></el-button>
+            <el-button size="mini" type="success" icon="el-icon-location" @click="showProgressBox"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -72,6 +72,19 @@
         <el-button type="primary" @click="addressVisible = false">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="物流进度"
+      :visible.sync="progressVisible"
+      width="50%">
+      <!-- 时间线组件  -->
+      <el-timeline>
+          <el-timeline-item v-for="(activity, index) in progressInfo" 
+          :key="index" :timestamp="activity.time">
+              {{activity.context}}
+          </el-timeline-item>
+      </el-timeline>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,9 +115,9 @@ export default {
           { required: true, message: '请填写详细地址', trigger: 'blur' },
         ],
       },
-      cityData
-
-      
+      cityData,
+      progressVisible: false,
+      progressInfo:[]  
     }
   },
   created() {
@@ -121,7 +134,7 @@ export default {
       this.$message.success('获取订单数据成功🥰')
       this.orderlist = res.data.goods
       this.total = res.data.total
-      console.log(this.orderlist)
+      // console.log(this.orderlist)
     },
     handleSizeChange(newSize){
       this.queryInfo.pagesize = newSize
@@ -136,6 +149,17 @@ export default {
     },
     addressDialogClosed(){
       this.$refs.addressFormRef.resetFields()
+    },
+    async showProgressBox(){
+      const {data:res} = await this.$http.get('/kuaidi/1106975712662')
+      if(res.meta.status !== 200){
+        return this.$message.error('获取物流进度失败😢')
+      }
+
+      this.progressInfo = res.data
+      console.log(this.progressInfo)
+      
+      this.progressVisible =true
     }
     
   },
