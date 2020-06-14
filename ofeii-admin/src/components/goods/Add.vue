@@ -240,6 +240,9 @@ export default {
     },
     addGood(){
       console.log(this.addForm)
+      this.$refs.addFormRef.validate(valid =>{
+        if(!valid) return this.$message.error('请填写必要的表单项😢')
+      })
     }
   }
 };
