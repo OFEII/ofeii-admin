@@ -24,13 +24,33 @@
 export default {
   data() {
     return {
+      // 查询条件
+      queryInfo: {
+        query: '',
+        pagenum: 1,
+        pagesize: 10
+      },
+      total:0,
+      orderlist:[]   
+
       
     }
   },
   created() {
-    
+    this.getOrderList()
   },
   methods: {
+    async getOrderList(){
+      const {data:res} = await this.$http.get('orders',{
+        params: this.queryInfo
+      })
+      if(res.meta.status !== 200){
+        return this.$message.error('获取订单数据失败😢')
+      }
+      this.$message.success('获取订单数据成功🥰')
+      this.orderlist = res.data
+      console.log(this.orderlist)
+    }
     
   },
 
