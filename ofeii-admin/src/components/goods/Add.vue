@@ -84,6 +84,14 @@
         </el-tabs>
       </el-form>
     </el-card>
+
+    <!-- 图片预览 -->
+    <el-dialog
+      title="图片预览"
+      :visible.sync="previewVisible"
+      width="50%">
+      <img :src="previewPath" alt="" class="previewImg">
+    </el-dialog>
   </div>
 </template>
 
@@ -131,7 +139,9 @@ export default {
       uploadURL:'http://127.0.0.1:8888/api/private/v1/upload',
       headerObj:{
         Authorization: window.sessionStorage.getItem('token')
-      }
+      },
+      previewPath:'',
+      previewVisible:false
     };
   },
   created() {
@@ -203,22 +213,24 @@ export default {
       }
     },
     // 处理图片预览效果
-    handlePreview(){
-
+    handlePreview(file){
+      // console.log(file)
+      this.previewPath = file.response.data.url
+      this.previewVisible = true
     },
     handleRemove(file){
-      console.log(file)
+      // console.log(file)
       const filePath = file.response.data.tmp_path
       const i = this.addForm.pics.findIndex(x => x.pic === filePath)
       this.addForm.pics.splice(i, 1)
-      console.log(this.addForm)
+      // console.log(this.addForm)
     },
     handleSuccess(response, file, fileList){
       // 1.concat
       const picInfo = {pic: response.data.tmp_path}
       // 2.push --> pics
       this.addForm.pics.push(picInfo)
-      console.log(this.addForm)
+      // console.log(this.addForm)
     }
   }
 };
@@ -230,5 +242,8 @@ export default {
 }
 .el-checkbox{
   margin: 0 1rem 0 0 !important;
+}
+.previewImg{
+  width: 100%;
 }
 </style>
