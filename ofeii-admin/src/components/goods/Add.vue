@@ -80,7 +80,12 @@
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
-          <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
+          <el-tab-pane label="商品内容" name="4">
+              <quill-editor
+                v-model="addForm.goods_introduce"
+              />
+              <el-button type="primary" @click="addGood" class="btnAdd">添加商品</el-button>
+          </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
@@ -108,7 +113,8 @@ export default {
         goods_number: 0,
         // 商品所属的分类数组
         goods_cat: [],
-        pics:[]
+        pics:[],
+        goods_introduce:''
       },
       addFormRules: {
         goods_name: [
@@ -231,6 +237,9 @@ export default {
       // 2.push --> pics
       this.addForm.pics.push(picInfo)
       // console.log(this.addForm)
+    },
+    addGood(){
+      console.log(this.addForm)
     }
   }
 };
@@ -245,5 +254,8 @@ export default {
 }
 .previewImg{
   width: 100%;
+}
+.btnAdd{
+  margin-top: 1rem;
 }
 </style>

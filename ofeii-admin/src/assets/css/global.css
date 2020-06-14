@@ -17,3 +17,7 @@ html,body,#app{
 .el-table th.gutter{
   display: table-cell!important;
 }
+
+.ql-editor{
+  min-height: 300px;
+}

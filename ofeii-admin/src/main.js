@@ -10,6 +10,15 @@ import './assets/fonts/iconfont.css'
 import TreeTable from 'vue-table-with-tree-grid'
 Vue.component('tree-table', TreeTable)
 
+// 导入富文本编辑器样式
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
+
+// 将富文本编辑器为全局的组件
+Vue.use(VueQuillEditor, /* { default global options } */)
+
 import axios from 'axios'
 axios.defaults.baseURL = "http://127.0.0.1:8888/api/private/v1/"
 // axios请求拦截器添加token 保证拥有获取数据的权限
