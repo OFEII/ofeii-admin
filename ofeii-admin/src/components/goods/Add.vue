@@ -75,7 +75,8 @@
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               list-type="picture"
-              :headers="headerObj">
+              :headers="headerObj"
+              :on-success="handleSuccess">
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
@@ -98,7 +99,8 @@ export default {
         goods_weight: 0,
         goods_number: 0,
         // 商品所属的分类数组
-        goods_cat: []
+        goods_cat: [],
+        pics:[]
       },
       addFormRules: {
         goods_name: [
@@ -206,6 +208,13 @@ export default {
     },
     handleRemove(){
 
+    },
+    handleSuccess(response, file, fileList){
+      // 1.concat
+      const picInfo = {pic: response.data.tmp_path}
+      // 2.push --> pics
+      this.addForm.pics.push(picInfo)
+      console.log(this.addForm)
     }
   }
 };
