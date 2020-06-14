@@ -101,6 +101,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   data() {
     return {
@@ -242,6 +244,12 @@ export default {
       console.log(this.addForm)
       this.$refs.addFormRef.validate(valid =>{
         if(!valid) return this.$message.error('请填写必要的表单项😢')
+        // 执行添加的业务
+        // lodash cloneDeep(obj)
+        const form =  _.cloneDeep(this.addForm)
+        form.goods_cat = form.goods_cat.join(',')
+        // const {data:res} = this.$http.post(`goods`)
+        console.log(form)
       })
     }
   }
